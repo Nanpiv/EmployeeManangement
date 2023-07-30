@@ -5,6 +5,16 @@ export default [
     icon: "fa-solid fa-gauge",
   },
   {
+    title: "Employee",
+    route: { name: "Employee" },
+    icon: "fa-solid fa-users",
+  },
+  {
+    title: "Attendance",
+    route: { name: "Attendance" },
+    icon: "fa-solid fa-list-check",
+  },
+  {
     title: "Report",
     route: { name: "Report" },
     icon: "fa-solid fa-file-contract",
@@ -22,10 +32,29 @@ export default [
         group: "admin",
       },
       {
-        title: "Employee",
-        route: { name: "AdminSetting", params: { activeCom: "employee" } },
+        title: "Branch",
+        route: { name: "AdminSetting", params: { activeCom: "branch" } },
+        icon: "fa-solid fa-user",
         group: "admin",
-        icon: "fa-solid fa-users",
+      },
+      {
+        title: "Department",
+        route: { name: "AdminSetting", params: { activeCom: "department" } },
+        icon: "fa-solid fa-user",
+        group: "admin",
+      },
+      {
+        title: "Position",
+        route: { name: "AdminSetting", params: { activeCom: "position" } },
+        group: "admin",
+        icon: "fa-solid fa-users-gear",
+        // roles: ['admin'],
+      },
+      {
+        title: "EmployeeType",
+        route: { name: "AdminSetting", params: { activeCom: "employeeType" } },
+        group: "admin",
+        icon: "fa-solid fa-users-gear",
         // roles: ['admin'],
       },
       {
