@@ -34,7 +34,7 @@ export default [
       {
         title: "Branch",
         route: { name: "AdminSetting", params: { activeCom: "branch" } },
-        icon: "fa-solid fa-user",
+        icon: 'fa-solid fa-code-branch',
         group: "admin",
       },
       {
