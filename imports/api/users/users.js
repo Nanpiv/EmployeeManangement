@@ -1,4 +1,4 @@
-import SimpleSchema from 'simpl-schema'
+import SimpleSchema from "simpl-schema";
 
 export const UserInsertSchema = new SimpleSchema({
   fullName: {
@@ -28,12 +28,12 @@ export const UserInsertSchema = new SimpleSchema({
   //   type: Date,
   //   optional: true,
   // },
-  // allowedBranches: {
-  //   type: Array,
-  // },
-  // 'allowedBranches.$': {
-  //   type: String,
-  // },
+  allowedBranches: {
+    type: Array,
+  },
+  "allowedBranches.$": {
+    type: String,
+  },
   // roleGroup: {
   //   type: String,
   // },
@@ -43,7 +43,7 @@ export const UserInsertSchema = new SimpleSchema({
   // 'roles.$': {
   //   type: String,
   // },
-})
+});
 
 export const UserUpdateSchema = new SimpleSchema({
   _id: {
@@ -77,12 +77,12 @@ export const UserUpdateSchema = new SimpleSchema({
   //   type: Date,
   //   optional: true,
   // },
-  // allowedBranches: {
-  //   type: Array,
-  // },
-  // 'allowedBranches.$': {
-  //   type: String,
-  // },
+  allowedBranches: {
+    type: Array,
+  },
+  "allowedBranches.$": {
+    type: String,
+  },
   // roleGroup: {
   //   type: String,
   // },
@@ -92,4 +92,4 @@ export const UserUpdateSchema = new SimpleSchema({
   // 'roles.$': {
   //   type: String,
   // },
-})
+});

@@ -10,17 +10,20 @@ export default {
     isLogged: Meteor.userId() !== null,
     userId: null,
     currentUser: Meteor.user() || Session.get('currentUser'),
-
+    allowedBranches: Session.get('allowedBranches') || [],
+    currentBranch: Session.get('currentBranch'),
   },
   // Getters
   getters: {
     userFullName(state) {
       return state.currentUser ? state.currentUser.profile.fullName : 'Unknown'
     },
+    currentBranchId(state) {
+      return state.currentBranch ? state.currentBranch._id : null
+    },
   },
   // Mutations
   mutations: {
-
     UPDATE_LANG(state, value) {
       state.lang = value
     },
@@ -31,14 +34,25 @@ export default {
       state.userId = val
     },
     SET_CURRENT_USER(state, val) {
-      // Session.setAuth('currentUser', val)
+      Session.setAuth('currentUser', val)
       state.currentUser = val
     },
-
+    UPDATE_ALLOWED_BRANCHES(state, value) {
+      Session.setAuth('allowedBranches', value)
+      state.allowedBranches = value
+    },
+    UPDATE_CURRENT_BRANCH(state, value) {
+      Session.setAuth('currentBranch', value)
+      state.currentBranch = value
+    },
+    LOGOUT(state) {
+      Session.clearAuth()
+      state.currentUser = null
+      localStorage.removeItem('vuex')
+    },
   },
   // Actions
   actions: {
-
     updateLang({ commit }, value) {
       value = value || 'en'
       commit('UPDATE_LANG', value)
@@ -66,6 +80,18 @@ export default {
         }
       })
     },
-
+    updateAllowedBranches({ commit }, branches) {
+      commit('UPDATE_ALLOWED_BRANCHES', branches)
+      commit(
+        'UPDATE_CURRENT_BRANCH',
+        branches && branches.length ? branches[0] : Session.get('currentBranch')
+      )
+    },
+    updateCurrentBranch({ commit }, val) {
+      commit('UPDATE_CURRENT_BRANCH', val)
+    },
+    logout({ commit }) {
+      commit('LOGOUT')
+    },
   },
 }

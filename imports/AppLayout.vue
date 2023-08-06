@@ -1,21 +1,27 @@
 <template>
   <div>
-    <transition name="fade" mode="out-in">
+    <transition
+      name="fade"
+      mode="out-in"
+    >
       <component :is="layout"> </component>
     </transition>
   </div>
 </template>
 
-<script setup>
-import { computed, watch, inject } from 'vue'
+<script lang="ts" setup>
+import { computed, watch } from 'vue'
 import { useRoute } from 'vue-router'
-import { useStore } from 'vuex'
+import { useStore } from '/imports/store'
 // import { useI18n } from 'vue-i18n'
-// import { subscribe, autoSubscribe, autoResult } from 'meteor/seamink:vue3'
+import { useSubscribe, useAutorun } from 'vue-meteor-tracker'
+
 // import Company from '/imports/api/company/company.js'
-// import Branches from '/imports/api/branches/branches'
+import Branches from '/imports/api/branches/branches'
 // Layouts
 import layouts from './ui/layouts'
+
+type Layout = keyof typeof layouts
 
 const route = useRoute()
 const store = useStore()
@@ -24,49 +30,45 @@ const store = useStore()
 
 // load current user
 store.dispatch('app/loadCurrentUser')
-// const currentUser = computed(() => store.state.app.currentUser)
+const currentUser = computed(() => store.state.app.currentUser)
 
 // Dynamic layout
 const layout = computed(() => {
-  const layout = route?.meta?.layout || null
+  const layout: Layout = (route?.meta?.layout as Layout) || 'Main'
 
   return layouts[layout] || layouts['Main']
 })
 
 // Subscribe
+const { subscribe } = useSubscribe()
+const { autorun } = useAutorun()
+
 // const { ready: companyReady } = subscribe('app.company')
 // const company = autoResult(() => {
 //   if (companyReady.value) return Company.findOne()
 // })
 
-// const branchSelector = computed(() => {
-//   let allowedBranches = currentUser?.value?.profile?.allowedBranches || []
-//   const selector = {}
-//   const isSuper = $userIsInRole('super')
+const branchSelector = computed(() => {
+  return currentUser?.value?.profile?.allowedBranches || []
+})
 
-//   if (!isSuper) selector['_id'] = { $in: allowedBranches }
+const { ready: branchReady } = subscribe(() => [
+  'app.branches',
+  {
+    _id: { $in: branchSelector.value },
+  },
+])
 
-//   return selector
-// })
+const { result: branches } = autorun(() => {
+  if (branchReady.value) return Branches.find().fetch()
 
-// const { ready: branchReady } = autoSubscribe(() => [
-//   'app.branches',
-//   branchSelector.value,
-// ])
-// const branches = autoResult(() => {
-//   if (branchReady.value) return Branches.find().fetch()
-// })
-
+  return []
+})
 // // Watch
 // watch(company, (value) => {
 //   // Set default Lang
 //   i18n.locale.value = value?.setting?.lang || 'en'
 //   store.dispatch('app/updateCompany', value)
 // })
-
-// watch(branches, (value) =>
-//   store.dispatch('app/updateAllowedBranches', value)
-// )
+watch(branches, (value) => store.dispatch('app/updateAllowedBranches', value))
 </script>
-
-<style lang="scss" scope></style>

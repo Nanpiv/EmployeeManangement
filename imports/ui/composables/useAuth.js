@@ -1,21 +1,23 @@
 import Notify from '../lib/notify'
 import { useRouter } from 'vue-router'
 import { ref } from 'vue'
+import { useStore } from '/imports/store'
 
-
-export default ()=>{
+export default () => {
   const router = useRouter()
+  const store = useStore()
 
   const loading = ref(false)
 
-  const login = ({username,password},inputRef) => {
+  const login = ({ username, password }, inputRef) => {
     loading.value = true
-    Meteor.loginWithPassword(username,password, (err) => {
+    Meteor.loginWithPassword(username, password, (err) => {
       if (err) {
         Notify.error({ message: 'Username or password is incorrect' })
         inputRef.focus()
         closeLoading()
       } else {
+        store.dispatch('app/setCurrentUser', Meteor.user())
         router.push({ name: 'Dashboard' })
         closeLoading()
       }
@@ -26,8 +28,8 @@ export default ()=>{
     Meteor.logout((err) => {
       if (err) {
         Notify.error({ message: err.reason || err })
-
       } else {
+        store.dispatch('app/logout')
         router.push('/login')
       }
     })
@@ -39,5 +41,5 @@ export default ()=>{
     }, 300)
   }
 
-  return {loading,logout,login}
+  return { loading, logout, login }
 }

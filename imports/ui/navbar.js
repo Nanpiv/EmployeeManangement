@@ -1,8 +1,8 @@
 export default [
   {
-    title: "Dashboard",
-    route: { name: "Dashboard" },
-    icon: "fa-solid fa-gauge",
+    title: 'Dashboard',
+    route: { name: 'Dashboard' },
+    icon: 'fa-solid fa-gauge',
   },
   {
     title: "Employee",
@@ -20,16 +20,16 @@ export default [
     icon: "fa-solid fa-file-contract",
   },
   {
-    title: "Admin Setting",
-    icon: "fa-solid fa-user-cog",
-    group: "admin",
-    route: { name: "AdminSetting", params: { activeCom: "profile" } },
+    title: 'Admin Setting',
+    icon: 'fa-solid fa-user-cog',
+    group: 'admin',
+    route: { name: 'AdminSetting', params: { activeCom: 'profile' } },
     children: [
       {
-        title: "Profile",
-        route: { name: "AdminSetting", params: { activeCom: "profile" } },
-        icon: "fa-solid fa-user-circle",
-        group: "admin",
+        title: 'Profile',
+        route: { name: 'AdminSetting', params: { activeCom: 'profile' } },
+        icon: 'fa-solid fa-user-circle',
+        group: 'admin',
       },
       {
         title: "Branch",
@@ -58,12 +58,19 @@ export default [
         // roles: ['admin'],
       },
       {
-        title: "User",
-        route: { name: "AdminSetting", params: { activeCom: "user" } },
-        group: "admin",
-        icon: "fa-solid fa-users",
+        title: 'Employee',
+        route: { name: 'AdminSetting', params: { activeCom: 'employee' } },
+        group: 'admin',
+        icon: 'fa-solid fa-users',
+        // roles: ['admin'],
+      },
+      {
+        title: 'User',
+        route: { name: 'AdminSetting', params: { activeCom: 'user' } },
+        group: 'admin',
+        icon: 'fa-solid fa-users',
         // roles: ['admin'],
       },
     ],
   },
-];
+]

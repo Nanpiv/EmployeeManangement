@@ -42,4 +42,10 @@ mdg:validated-method
 
 # Storage
 
-session
+session@1.2.1
+cultofcoders:persistent-session
+
+# UI
+
+seamink:vue3-sass
+zodern:types

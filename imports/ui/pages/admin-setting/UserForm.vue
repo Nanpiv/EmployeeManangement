@@ -1,16 +1,28 @@
 <template>
-  <q-dialog :value="value" @hide="cancel()">
+  <q-dialog
+    :value="value"
+    @hide="cancel()"
+  >
     <q-card style="width: 70%; max-width: 80vw">
       <q-toolbar>
         <q-toolbar-title>{{ title }}</q-toolbar-title>
 
-        <q-btn flat round dense icon="close" @click="cancel()" />
+        <q-btn
+          flat
+          round
+          dense
+          icon="close"
+          @click="cancel()"
+        />
       </q-toolbar>
 
       <q-separator />
 
       <q-card-section>
-        <validate-form ref="formRef" :validation-schema="rules">
+        <validate-form
+          ref="formRef"
+          :validation-schema="rules"
+        >
           <q-form @submit.prevent>
             <q-card-section>
               <div class="row q-col-gutter-x-xl q-col-gutter-y-md">
@@ -75,56 +87,90 @@
                 <div class="col-xs-12 col-md-6 col-lg-6">
                   <div class="row q-col-gutter-y-sm">
                     <!-- Update  -->
-                    <div v-if="showId" class="col-12">
-                      <fieldset>
+
+                    <div
+                      v-if="showId"
+                      class="col-12"
+                    >
+                      <!-- <fieldset>
                         <legend>
                           Change Password
                           <q-toggle v-model="isUpdatePassword" />
-                        </legend>
+                        </legend> -->
+                      <!-- <q-toggle v-model="isUpdatePassword">
+                        <q-tooltip
+                          class="bg-indigo"
+                          :offset="[10, 10]"
+                        >
+                          Change Password
+                        </q-tooltip>
+                      </q-toggle> -->
+
+                      <div class="row q-col-gutter-y-sm">
+                        <div class="col-12">
+                          <div class="row q-col-gutter-y-sm">
+                            <div
+                              v-if="showId"
+                              class="col-2"
+                            >
+                              <q-toggle v-model="isUpdatePassword">
+                                <q-tooltip
+                                  transition-show="flip-right"
+                                  transition-hide="flip-left"
+                                  class="bg-black"
+                                  :offset="[10, 10]"
+                                >
+                                  Change Password
+                                </q-tooltip>
+                              </q-toggle>
+                            </div>
+                            <div
+                              v-if="isUpdatePassword"
+                              class="col-10"
+                            >
+                              <validate-field
+                                v-slot="{ value, field, errorMessage }"
+                                v-model="form.password"
+                                name="password"
+                              >
+                                <q-input
+                                  :model-value="value"
+                                  label="Password *"
+                                  type="password"
+                                  outlined
+                                  dense
+                                  v-bind="field"
+                                  :error="!!errorMessage"
+                                  :error-message="errorMessage"
+                                />
+                              </validate-field>
+                            </div>
+                          </div>
+                        </div>
 
                         <div
                           v-if="isUpdatePassword"
-                          class="row q-col-gutter-y-sm"
+                          class="col-12"
                         >
-                          <div class="col-12">
-                            <validate-field
-                              v-slot="{ value, field, errorMessage }"
-                              v-model="form.password"
-                              name="password"
-                            >
-                              <q-input
-                                :model-value="value"
-                                label="Password *"
-                                type="password"
-                                outlined
-                                dense
-                                v-bind="field"
-                                :error="!!errorMessage"
-                                :error-message="errorMessage"
-                              />
-                            </validate-field>
-                          </div>
-
-                          <div class="col-12">
-                            <validate-field
-                              v-slot="{ value, field, errorMessage }"
-                              v-model="form.confirmPassword"
-                              name="confirmPassword"
-                            >
-                              <q-input
-                                :model-value="value"
-                                label="Confirm password *"
-                                type="password"
-                                outlined
-                                dense
-                                v-bind="field"
-                                :error="!!errorMessage"
-                                :error-message="errorMessage"
-                              />
-                            </validate-field>
-                          </div>
+                          <validate-field
+                            v-slot="{ value, field, errorMessage }"
+                            v-model="form.confirmPassword"
+                            name="confirmPassword"
+                          >
+                            <q-input
+                              :model-value="value"
+                              label="Confirm password *"
+                              type="password"
+                              outlined
+                              dense
+                              v-bind="field"
+                              :error="!!errorMessage"
+                              :error-message="errorMessage"
+                            />
+                          </validate-field>
                         </div>
-                      </fieldset>
+                      </div>
+                      <!-- </fieldset> -->
                     </div>
 
                     <!-- New -->
@@ -167,13 +213,47 @@
                         </validate-field>
                       </div>
                     </template>
+
+                    <div class="col-12">
+                      <validate-field
+                        v-slot="{ value, field, errorMessage }"
+                        v-model="form.allowedBranches"
+                        name="allowedBranches"
+                      >
+                        <q-select
+                          dense
+                          outlined
+                          :model-value="value"
+                          label="Allowed Branches"
+                          :options="branchOpts"
+                          v-bind="field"
+                          multiple
+                          map-options
+                          clearable
+                          emit-value
+                          option-value="_id"
+                          option-label="name"
+                        />
+                        <div
+                          v-if="!!errorMessage"
+                          class="text-negative"
+                          style="font-size: 11px"
+                        >
+                          {{ errorMessage }}
+                        </div>
+                      </validate-field>
+                    </div>
+
                     <div class="col-12">
                       <validate-field
                         v-slot="{ value, field, errorMessage }"
                         v-model="form.status"
                         name="status"
                       >
-                        <span class="text-grey-9" style="padding-right: 8px">
+                        <span
+                          class="text-grey-9"
+                          style="padding-right: 8px"
+                        >
                           Status
                         </span>
 
@@ -237,14 +317,13 @@
 <script setup>
 import { ref, toRefs, computed, onMounted, watch } from 'vue'
 import { cloneDeep } from 'lodash'
-import { useStore } from 'vuex'
+import { useStore } from '/imports/store'
 import { Form as ValidateForm, Field as ValidateField } from 'vee-validate'
 import { object, string, number, array, ref as yupRef } from 'yup'
 // Lib
 import Notify from '../../lib/notify'
 // Composables
 import useMethod from '../../composables/useMethod'
-import useAuth from '../../composables/useAuth'
 import { useQuasar } from 'quasar'
 
 const props = defineProps({
@@ -278,9 +357,11 @@ const initForm = () => {
     password: '',
     confirmPassword: '',
     status: 'Active',
+    allowedBranches: [],
   }
 }
 
+const branchOpts = ref([])
 const formRef = ref(null)
 const form = ref(initForm())
 
@@ -311,6 +392,7 @@ const rules = object({
         })
     }),
   fullName: string().required(),
+  allowedBranches: array().min(1).of(string()),
   email: string()
     .required()
     .email()
@@ -351,6 +433,18 @@ const statusOpts = ref([
   { label: 'Inactive', value: 'Inactive' },
 ])
 
+const getBrachOpts = () => {
+  const { call } = useMethod('branchOpts')
+
+  call()
+    .then((res) => {
+      branchOpts.value = res
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+}
+
 const getUpdateDoc = () => {
   const { call } = useMethod('app.findOneUser', null)
 
@@ -369,7 +463,9 @@ const getUpdateDoc = () => {
         password: '',
         email: result.emails[0].address,
         status: result.profile.status,
+        allowedBranches: result.profile.allowedBranches,
       }
+      isUpdatePassword.value = false
     })
     .catch((error) => {
       Notify.error({ message: error.reason || error })
@@ -452,6 +548,7 @@ onMounted(() => {
   if (showId.value) {
     getUpdateDoc()
   }
+  getBrachOpts()
 })
 </script>
 

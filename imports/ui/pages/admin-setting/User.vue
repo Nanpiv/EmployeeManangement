@@ -11,7 +11,13 @@
       >
         <template #top>
           <div class="q-gutter-x-md">
-            <q-btn color="primary" no-caps @click="addNew"> Add New </q-btn>
+            <q-btn
+              color="primary"
+              no-caps
+              @click="addNew"
+            >
+              Add New
+            </q-btn>
           </div>
 
           <q-space />
@@ -31,7 +37,10 @@
 
         <template #body-cell-username="props">
           <q-td :props="props">
-            <span class="ra-text-link" @click="edit(props.row)">
+            <span
+              class="ra-text-link"
+              @click="edit(props.row)"
+            >
               {{ props.row.username }}
             </span>
           </q-td>
@@ -56,7 +65,7 @@
         <template #body-cell-allowedBranches="props">
           <q-td :props="props">
             <span>
-              {{ formatBranches(props.row.allowedBranchDocs) }}
+              {{ formatBranches(props.row.allowedBranches) }}
             </span>
           </q-td>
         </template>
@@ -133,7 +142,12 @@ const columns = ref([
     sortable: true,
   },
   { name: 'email', label: 'Email', align: 'left', field: 'emails' },
-
+  {
+    name: 'allowedBranches',
+    label: 'Branch',
+    align: 'left',
+    field: 'allowedBranches',
+  },
   {
     name: 'status',
     label: 'Status',
@@ -186,7 +200,7 @@ const formatDate = (date) => {
 const formatBranches = (branches) => {
   let content = ''
   branches.forEach((branch, index) => {
-    content += `${branch.code}: ${branch.name} `
+    content += `${branch.name} `
 
     if (index + 1 < branches.length) {
       content += ','

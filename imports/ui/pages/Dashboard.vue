@@ -21,7 +21,11 @@
     <div class="row q-col-gutter-x-md q-col-gutter-y-xs q-mb-md">
       <!-- Chart -->
       <div class="col-xs-12 col-sm-8">
-        <q-card flat bordered class="chart">
+        <q-card
+          flat
+          bordered
+          class="chart"
+        >
           <p
             class="text-overline text-bold text-center q-ma-none text-red-10 chart-title"
           >
@@ -32,7 +36,11 @@
       </div>
 
       <div class="col-xs-12 col-sm-4">
-        <q-card flat bordered class="box">
+        <q-card
+          flat
+          bordered
+          class="box"
+        >
           <div class="text-subtitle1 q-py-sm q-px-md">Browser Usage</div>
           <q-separator />
 

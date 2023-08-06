@@ -6,7 +6,10 @@
   >
     <!--REPORT TOOLS-->
     <q-card-section class="header">
-      <div v-if="!visiblePrintInvoice" class="card-header">
+      <div
+        v-if="!visiblePrintInvoice"
+        class="card-header"
+      >
         <div class="header-left">
           <!--Show Part-->
           <q-btn
@@ -129,7 +132,10 @@
         style="margin: 0 auto"
       >
         <!--REPORT HEADER-->
-        <div v-if="showPart.header" class="header">
+        <div
+          v-if="showPart.header"
+          class="header"
+        >
           <div class="company-name kh-moul">
             {{ company.name }}
           </div>
@@ -137,23 +143,35 @@
         </div>
 
         <!--REPORT FILTER-->
-        <div v-if="showPart.filter" class="filter">
+        <div
+          v-if="showPart.filter"
+          class="filter"
+        >
           <slot name="filter" />
         </div>
 
         <!--REPORT CONTENT-->
-        <div v-if="showPart.content" class="content">
+        <div
+          v-if="showPart.content"
+          class="content"
+        >
           <slot />
         </div>
 
         <!--REPORT TIMESTAMP-->
-        <div v-if="showPart.timestamp" class="timestamp">
+        <div
+          v-if="showPart.timestamp"
+          class="timestamp"
+        >
           By {{ userFullName }}, {{ timestamp }}
           <span v-if="execTime"> ({{ execTime }} sec.) </span>
         </div>
 
         <!--REPORT FOOTER-->
-        <div v-if="showPart.footer" class="footer">
+        <div
+          v-if="showPart.footer"
+          class="footer"
+        >
           <div>
             <div>
               <slot name="footer" />
@@ -162,9 +180,16 @@
         </div>
 
         <!--REPORT SIGNATURE-->
-        <div v-if="showPart.signature" class="signature">
+        <div
+          v-if="showPart.signature"
+          class="signature"
+        >
           <!-- :gutter="10" -->
-          <div class="row" type="flex" justify="space-around">
+          <div
+            class="row"
+            type="flex"
+            justify="space-around"
+          >
             <div class="col colspan-8">Approved</div>
             <div class="col colspan-8">Verified</div>
             <div class="col colspan-8">Prepared</div>
@@ -178,7 +203,7 @@
 <script lang="ts" setup>
 import { has } from 'lodash'
 import moment from 'moment'
-import { useStore } from 'vuex'
+import { useStore } from '/imports/store'
 import { Printd } from 'printd'
 import { computed, ref, watch } from 'vue'
 

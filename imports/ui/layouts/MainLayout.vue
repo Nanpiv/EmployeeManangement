@@ -1,9 +1,10 @@
-<script setup>
+<script lang="ts" setup>
 import { ref } from 'vue'
 import SideBar from './Sidebar.vue'
 import Notification from './_Notification.vue'
 import AdminSetting from './_AdminSetting.vue'
 import Breadcrumb from './_Breadcrumb.vue'
+import Branch from './_Branch.vue'
 
 const leftDrawerOpen = ref(false)
 const toggleLeftDrawer = () => {
@@ -17,7 +18,10 @@ const stateChange = (val) => {
 <template>
   <q-layout view="lHr LpR lfr">
     <!-- Header -->
-    <q-header elevated class="bg-white text-dark">
+    <q-header
+      elevated
+      class="bg-white text-dark"
+    >
       <q-toolbar>
         <q-btn
           flat
@@ -31,7 +35,12 @@ const stateChange = (val) => {
         <q-toolbar-title class="app-breadcrumb-toolbar">
           <Breadcrumb />
         </q-toolbar-title>
+
+        <!-- Right side -->
         <div class="q-gutter-x-xs">
+          <!-- Branch -->
+          <Branch />
+
           <!-- Notification -->
           <Notification />
           <!-- Full screen -->
@@ -50,14 +59,20 @@ const stateChange = (val) => {
     </q-header>
 
     <!-- Sidebar -->
-    <SideBar :drawer-state="leftDrawerOpen" @state-change="stateChange" />
+    <SideBar
+      :drawer-state="leftDrawerOpen"
+      @state-change="stateChange"
+    />
 
     <!-- Content -->
     <q-page-container class="bg-grey-2">
       <q-page class="overflow-hidden q-pa-md">
         <router-view v-slot="{ Component, route }">
           <!-- <transition name="fade-x" mode="out-in"> -->
-          <component :is="Component" :key="route.fullPath" />
+          <component
+            :is="Component"
+            :key="route.fullPath"
+          />
           <!-- </transition> -->
         </router-view>
       </q-page>

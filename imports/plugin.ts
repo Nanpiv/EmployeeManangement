@@ -1,5 +1,7 @@
+import { App as Application } from 'vue'
 import router from './router'
-import store from './store'
+import { VueMeteor } from 'vue-meteor-tracker'
+import { store, key } from './store'
 // Quasar
 import { Quasar, AppFullscreen, Notify, Dialog, LoadingBar } from 'quasar'
 
@@ -9,11 +11,15 @@ import '@quasar/extras/material-icons/material-icons.css'
 // import '@quasar/extras/fontawesome-v6/fontawesome-v6.css'
 
 // Import Quasar css
-import 'quasar/src/css/index.sass'
+// import 'quasar/src/css/index.sass'
 
-export default (app) => {
+// UI plugin
+import UserIsInRole from '/imports/ui/plugin/userIsInRole'
+
+export default (app: Application) => {
   app.use(router)
-  app.use(store)
+  app.use(store, key)
+  app.use(VueMeteor)
 
   app.use(Quasar, {
     plugins: {
@@ -23,4 +29,7 @@ export default (app) => {
       LoadingBar,
     },
   })
+
+  // UI plugins
+  app.use(UserIsInRole)
 }

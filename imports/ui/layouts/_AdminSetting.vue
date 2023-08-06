@@ -1,7 +1,13 @@
 <template>
-  <q-btn round unelevated>
+  <q-btn
+    round
+    unelevated
+  >
     <q-avatar size="30px">
-      <img src="/images/user-avatar.png" class="cursor-pointer" />
+      <img
+        src="/images/user-avatar.png"
+        class="cursor-pointer"
+      />
     </q-avatar>
 
     <q-menu
@@ -10,28 +16,47 @@
       transition-show="scale"
       transition-hide="scale"
     >
-      <q-list style="min-width: 200px" class="admin-setting-menu">
+      <q-list
+        style="min-width: 200px"
+        class="admin-setting-menu"
+      >
         <q-item>
           <q-item-section>
             <q-item-label class="text-subtitle2 text-weight-bold text-grey-9">
               {{ fullName }}
             </q-item-label>
-            <q-item-label lines="1" class="text-grey-8">
+            <q-item-label
+              lines="1"
+              class="text-grey-8"
+            >
               {{ username }}
             </q-item-label>
           </q-item-section>
         </q-item>
         <q-separator />
-        <template v-for="(menu, index) in adminMenu" :key="index">
+        <template
+          v-for="(menu, index) in adminMenu"
+          :key="index"
+        >
           <!-- Separator only above logout -->
           <q-separator
             v-if="menu.id === 'logout'"
             :key="`separator-${index}`"
           />
           <!-- Item -->
-          <q-item v-close-popup clickable @click="userMenuClick(menu)">
-            <q-item-section v-if="menu.icon" avatar>
-              <q-icon :name="menu.icon" :color="menu.color" />
+          <q-item
+            v-close-popup
+            clickable
+            @click="userMenuClick(menu)"
+          >
+            <q-item-section
+              v-if="menu.icon"
+              avatar
+            >
+              <q-icon
+                :name="menu.icon"
+                :color="menu.color"
+              />
             </q-item-section>
             <q-item-section class="text-grey-9">
               {{ menu.title }}
@@ -45,7 +70,7 @@
 
 <script setup>
 import { reactive, computed, nextTick } from 'vue'
-import { useStore } from 'vuex'
+import { useStore } from '/imports/store'
 import { useRouter } from 'vue-router'
 // import { useI18n } from 'vue-i18n'
 import Notify from '../lib/notify'

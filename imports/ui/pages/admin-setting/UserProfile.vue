@@ -1,6 +1,9 @@
 <template>
   <q-card>
-    <validate-form ref="formRef" :validation-schema="rules">
+    <validate-form
+      ref="formRef"
+      :validation-schema="rules"
+    >
       <q-form @submit.prevent>
         <q-card-section>
           <div class="row q-col-gutter-x-xl q-col-gutter-y-md">
@@ -145,7 +148,7 @@ import { ref, watch, computed } from 'vue'
 import { Form as ValidateForm, Field as ValidateField } from 'vee-validate'
 import { object, string, ref as yupRef } from 'yup'
 import { cloneDeep } from 'lodash'
-import { useStore } from 'vuex'
+import { useStore } from '/imports/store'
 // Composables
 import useMethod from '/imports/ui/composables/useMethod'
 import Notify from '../../lib/notify'
