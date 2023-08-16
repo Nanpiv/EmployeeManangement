@@ -98,6 +98,7 @@
                 <!-- <th v-if="showMoreHeader('type')">Type</th>
                 <th v-if="showMoreHeader('address')">Date</th> -->
                 <th>Reason</th>
+                <th>Branch CheckIn</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -112,7 +113,8 @@
                 <td>{{ doc.type }}</td>
                 <td >{{ doc.tranDate.toLocaleString() }}</td>
                 <td>{{ doc.reason }}</td>
-                <td>{{ compareTime }}</td>
+                <td>{{ doc.checkIn.toLocaleString() }}</td>
+                <td>{{ doc.checkIn<doc.tranDate?'Late':'Good' }}</td>
                 <!-- <td v-if="showMoreHeader('address')">{{ doc.address }}</td> -->
               </tr>
             </tbody>
@@ -189,22 +191,7 @@ return moment(date).format('YYYY/MM/DD hh:mm A')
   onMounted(()=>
   fetchAttendances()
   )
-const compareTime=ref()
-  watch(()=>reportData.value,()=>{
-   reportData.value.forEach((it)=>{
-    console.log('sss',it.checkOut.toTimeString())
-    if(it.type==='checkIn' && it.tranDate.toTimeString()< it.checkIn.toTimeString()){
-        compareTime.value='Good'
-        console.log('Good')
-    }else if(it.type==='checkOut' && it.tranDate.toTimeString()< it.checkOut.toTimeString()){
-        compareTime.value='Late'
-        console.log('late')
-    }else{
-        console.log('...')
-    }
-   })
- 
-  })
+
 
   </script>
   <style lang="scss" scoped>
