@@ -72,6 +72,7 @@
                           class="w-full"
                           v-model="form.checkIn"
                           readonly
+                          
                         >
                           <!-- :rules="['time']" -->
                           <!-- mask="time" -->
@@ -87,7 +88,7 @@
                               >
                                 <q-time
                                   v-model="form.checkIn"
-                                  mask="HH:mm A"
+                                  mask="HH:mm"
                                 >
                                   <div class="row items-center justify-end">
                                     <q-btn
@@ -124,7 +125,8 @@
                               >
                                 <q-time
                                   v-model="form.checkOut"
-                                  mask="HH:mm A"
+                                  mask="HH:mm"
+                                  
                                 >
                                   <div class="row items-center justify-end">
                                     <q-btn
@@ -220,8 +222,8 @@ const initForm = () => {
   return {
     name: '',
     address: '',
-    checkIn: '08:00 AM',
-    checkOut: '17:00 PM',
+    checkIn: '08:00',
+    checkOut: '17:00',
   }
 }
 
@@ -234,7 +236,6 @@ const rules = object({
     .max(20)
     .test('exist', 'name is taken', (value) => {
       if (!value) return true
-
       const _id = showId.value || null
       const selector = {
         _id: {
@@ -254,38 +255,7 @@ const rules = object({
           return false
         })
     }),
-  // address: string().required(),
-  // email: string()
-  //   .required()
-  //   .email()
-  //   .test('exist', 'email is taken', (value) => {
-  //     if (!value) return true
-
-  //     const _id = showId.value || null
-  //     const selector = {
-  //       _id: {
-  //         $ne: _id,
-  //       },
-  //       emails: { $elemMatch: { address: value } },
-  //     }
-
-  //     const { call } = useMethod('app.findOneUser', null)
-  //     return call({
-  //       selector,
-  //     })
-  //       .then((result) => {
-  //         return !result
-  //       })
-  //       .catch(() => {
-  //         return false
-  //       })
-  //   }),
-  // password: string().min(6),
-  // confirmPassword: string().oneOf(
-  //   [yupRef('password'), null],
-  //   'passwords must match'
-  // ),
-  // status: string().required(),
+ 
 })
 
 const getUpdateDoc = () => {
@@ -301,8 +271,14 @@ const getUpdateDoc = () => {
         _id: result._id,
         name: result.name,
         address: result.address,
-        checkIn: moment(result.checkIn).format('HH:mm A'),
-        checkOut: moment(result.checkOut).format('HH:mm A'),
+        checkIn: moment(result.checkIn).format('HH:mm'),
+        checkOut: moment(result.checkOut).format('HH:mm'),
+        // checkIn:result.checkIn.moment().format('MMMM Do YYYY, h:mm:ss a'),
+        // checkOut:moment(result.checkOut).format('LT'),
+        // checkIn:moment(result.checkIn).format('LT')
+
+
+
       }
     })
     .catch((error) => {
@@ -323,6 +299,7 @@ const submit = async () => {
     doc.checkIn = convertDateTime(form.value.checkIn)
     doc.checkOut = convertDateTime(form.value.checkOut)
     //
+ 
     call(doc)
       .then(() => {
         Notify.success({ message: 'Success' })
@@ -374,6 +351,7 @@ const remove = () => {
 }
 
 const convertDateTime = (strTime) => {
+ 
   const curr = moment()
   const splitStrTime = strTime.split(':')
 

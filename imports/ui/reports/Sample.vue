@@ -32,7 +32,7 @@
               <q-input
                 v-model="form.name"
                 filled
-                mask="date"
+                
                 dense
                 placeholder="Name..."
               >

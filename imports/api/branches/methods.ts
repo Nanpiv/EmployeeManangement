@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor'
 import Branches from "./branches";
 
 Meteor.methods({
+
   fetchBranches(selector: any) {
     return Branches.find(selector).fetch()
   },

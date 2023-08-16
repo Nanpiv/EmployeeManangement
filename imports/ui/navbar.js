@@ -15,6 +15,11 @@ export default [
     icon: "fa-solid fa-list-check",
   },
   {
+    title: "Leave",
+    route: { name: "Leave" },
+    icon: "fa-solid fa-list",
+  },
+  {
     title: "Report",
     route: { name: "Report" },
     icon: "fa-solid fa-file-contract",
@@ -57,13 +62,13 @@ export default [
         icon: "fa-solid fa-users-gear",
         // roles: ['admin'],
       },
-      {
-        title: 'Employee',
-        route: { name: 'AdminSetting', params: { activeCom: 'employee' } },
-        group: 'admin',
-        icon: 'fa-solid fa-users',
-        // roles: ['admin'],
-      },
+      // {
+      //   title: 'Employee',
+      //   route: { name: 'AdminSetting', params: { activeCom: 'employee' } },
+      //   group: 'admin',
+      //   icon: 'fa-solid fa-users',
+      //   // roles: ['admin'],
+      // },
       {
         title: 'User',
         route: { name: 'AdminSetting', params: { activeCom: 'user' } },
