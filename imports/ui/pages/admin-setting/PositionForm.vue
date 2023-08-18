@@ -158,6 +158,7 @@ const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
           //   // $regex: new RegExp('^' + value.replace(/%/g, '.*') + '$', 'i'),
           //   $regex: new RegExp(value, 'i'),
           // },
+          branchId:currentBranchId.value,
           name: value,
         }
         if (props.showId) {

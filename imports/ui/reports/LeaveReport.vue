@@ -28,15 +28,30 @@
                   </template>
                 </q-input>
               </div>
-              <div class="col-xs-12 col-md-6 col-lg-6">
-                <q-input
+              <div class="col-xs-12 col-md-6 col-lg-12">
+
+                <q-select
+                          dense
+                          outlined
+                          :model-value="value"
+                          label="User"
+                          :options="users"
+                          v-bind="field"
+                        
+                          map-options
+                          clearable
+                          emit-value
+                          option-value="_id"
+                          option-label="username"
+                        />
+                <!-- <q-input
                   v-model="form.name"
                   filled
                   mask="date"
                   dense
                   placeholder="Name..."
                 >
-                </q-input>
+                </q-input> -->
               </div>
             </div>
           </q-card-section>
@@ -74,13 +89,9 @@
               [All]
               <div class="ra-mt-sm" />
             </div>
+           
             <div class="col colspan-8">
-              <span class="title"> Date: </span>
-              [All]
-              <div class="ra-mt-sm" />
-            </div>
-            <div class="col colspan-8">
-              <span class="title"> Reason </span>
+              <span class="title"> Status </span>
               [All]
             </div>
           </div>
@@ -117,7 +128,7 @@
                 <td >{{ doc.toDate.toLocaleString() }}</td>
                 <td>{{ doc.reason }}</td>
                 <td>{{ doc.status }}</td>
-                <td>{{ doc.acceptedById }}</td>
+                <td>{{ doc.acceptedBy }}</td>
 
                 <!-- <td v-if="showMoreHeader('address')">{{ doc.address }}</td> -->
               </tr>
@@ -138,18 +149,18 @@
 
 
   const store = useStore()
-
+  const users=ref([])
   const currentBranchId =computed(()=>store.getters['app/currentBranchId'])
   const execTime = ref(0)
   const paperSize = ref('a4-p')
   const reportName = ref('Leave Report')
   const columns = ref([
-    { label: 'Date', value: 'tranDate' },
+    { label: 'Name', value: 'employeeName' },
     { label: 'Type', value: 'type' },
-    { label: 'Reason', value: 'reason' },
+    { label: 'Status', value: 'status' },
 
   ])
-  const checkedColumns = ref(['gender', 'address'])
+  const checkedColumns = ref(['employeeName', 'type','status'])
   const reportData = ref([
     //date
   ])
@@ -177,6 +188,20 @@
         console.log('fetch leave error')
       }
   })
+
+
+
+  //fetch user
+  const fetchUser =()=>{
+    Meteor.call('fetchUser',(err,res)=>{
+      if(!err){
+        console.log('user',res)
+        users.value=res
+      }else{
+        console.log('user error',err)
+      }
+    })
+  }
 
     //fromart time date
  const formatTime = (date) => {

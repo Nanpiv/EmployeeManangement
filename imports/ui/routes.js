@@ -3,6 +3,7 @@ import Login from "./pages/Login.vue";
 import Employee from "./pages/Employees.vue"
 import Attendance from "./pages/Attendance.vue"
 import Leave from "./pages/Leave.vue"
+// import Notifications from './pages/'
 // Setting
 import AdimSetting from "./pages/AdminSetting.vue";
 // import Branch from "./pages/admin-setting/Branch.vue"
@@ -32,13 +33,21 @@ export default [
     },
   },
   {
-    path: "/leve",
+    path: "/leave",
     name: "Leave",
     component: Leave,
     meta: {
       title: "Leave",
     },
   },
+  // {
+  //   path: "/notifications",
+  //   name: "Notifications",
+  //   component: Notifications,
+  //   meta: {
+  //     title: "Notifications",
+  //   },
+  // },
   {
     path: "/login",
     name: "Login",

@@ -79,10 +79,7 @@
               [All]
               <div class="ra-mt-sm" />
             </div>
-            <div class="col colspan-8">
-              <span class="title"> Reason </span>
-              [All]
-            </div>
+           
           </div>
         </template>
   
@@ -98,7 +95,7 @@
                 <!-- <th v-if="showMoreHeader('type')">Type</th>
                 <th v-if="showMoreHeader('address')">Date</th> -->
                 <th>Reason</th>
-                <th>Branch CheckIn</th>
+                <th>Branch CheckIn/CheckOut</th>
                 <th>Status</th>
               </tr>
             </thead>
@@ -113,8 +110,12 @@
                 <td>{{ doc.type }}</td>
                 <td >{{ doc.tranDate.toLocaleString() }}</td>
                 <td>{{ doc.reason }}</td>
-                <td>{{ doc.checkIn.toLocaleString() }}</td>
-                <td>{{ doc.checkIn<doc.tranDate?'Late':'Good' }}</td>
+                <td v-if="doc.type==='checkIn'">{{ doc.checkIn.toLocaleTimeString() }}</td>
+                <td v-else>{{ doc.checkOut.toLocaleTimeString() }}</td>
+
+                <td v-if="doc.type==='checkIn'">{{ doc.checkIn.toLocaleTimeString()<doc.tranDate.toLocaleTimeString()?'Late':'Good' }}</td>
+                <td v-else>{{ doc.checkOut.toLocaleTimeString() < doc.tranDate.toLocaleTimeString()?'Good':'Bad' }}</td>
+
                 <!-- <td v-if="showMoreHeader('address')">{{ doc.address }}</td> -->
               </tr>
             </tbody>

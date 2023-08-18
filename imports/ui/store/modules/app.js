@@ -18,6 +18,9 @@ export default {
     userFullName(state) {
       return state.currentUser ? state.currentUser.profile.fullName : 'Unknown'
     },
+    currentUserId(state){
+return state.currentUser ? state.currentUser._id:null
+    },
     currentBranchId(state) {
       return state.currentBranch ? state.currentBranch._id : null
     },

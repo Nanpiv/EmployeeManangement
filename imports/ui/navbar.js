@@ -19,6 +19,11 @@ export default [
     route: { name: "Leave" },
     icon: "fa-solid fa-list",
   },
+  // {
+  //   title: "Notifications",
+  //   route: { name: "Notifications" },
+  //   icon: "fa-solid fa-list",
+  // },
   {
     title: "Report",
     route: { name: "Report" },

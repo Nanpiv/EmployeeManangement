@@ -292,7 +292,7 @@ const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
     positionId:'',
     address:'',
     telephone:'',
-    startDate:'',
+    startDate:new Date(),
     checkIn:'',
     checkOut:'',
     branchId: '',
@@ -513,8 +513,8 @@ onMounted(() => {
           form.value = res
           form.value.startDate=res.startDate.toLocaleDateString('zh-Hans-CN')
          
-          form.value.checkIn=moment(res.checkIn, "HH:mm A").format("hh:mm");
-          form.value.checkOut=moment(res.checkOut, "HH:mm A").format("hh:mm");
+          form.value.checkIn=moment(res.checkIn, "HH:mm").format("HH:mm");
+          form.value.checkOut=moment(res.checkOut, "HH:mm").format("HH:mm");
           console.log('edit',res)
         })
       }
@@ -529,13 +529,21 @@ onMounted(() => {
     const doc = branches.value.find(it=>it._id=value)
     console.log(doc)
     form.value.branchId = currentBranchId.value
-    form.value.checkIn=moment(doc.checkIn, "HH:mm").format("hh:mm");
-    form.value.checkOut=moment(doc.checkOut, "HH:mm").format("hh:mm");
+    form.value.checkIn=moment(doc.checkIn, "HH:mm").format("HH:mm");
+    form.value.checkOut=moment(doc.checkOut, "HH:mm").format("HH:mm");
    
     console.log(form.value.branchId)
 
   })
 
-  
+    
+  watch(
+    ()=>visibleDialog.value,(value)=>{
+      if(value==true){
+        form.value.startDate=moment(form.value.startDate,).format('YYYY/MM/DD');
+
+      }
+    }
+  )  
   </script>
   

@@ -47,8 +47,8 @@
       </template>
       <template #body-cell-tranDate="props">
         <q-td :props="props">
-         
-            {{ props.row.tranDate.toLocaleString('en-GB') }}
+         {{ formatTime(props.row.tranDate) }}
+            <!-- {{ props.row.tranDate.toLocaleString('en-GB') }} -->
          
         </q-td>
       </template>
@@ -68,6 +68,7 @@
     />
   </template>
   <script setup>
+  import moment from 'moment'
   import { onMounted, ref,watch,computed } from 'vue'
   import Notify from '/imports/ui/lib/notify'
 import AttendanceForm from './AttendanceForm.vue'
@@ -104,6 +105,11 @@ const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
   const addNew = () => {
     visibleDialog.value = true
   }
+  //formatTime
+  const formatTime = (date) => {
+  return moment(date).format('YYYY/MM/DD hh:mm A')
+
+}
   
   // method
   const fetchData = () => {

@@ -199,9 +199,10 @@
   </script>
   
   <script setup>
+  import { subscribe, autorun } from 'vue-meteor-tracker'
  import { useStore } from '/imports/store'
   import Notify from '/imports/ui/lib/notify'
-  import { ref, watch, onMounted, computed } from 'vue'
+  import { ref, watch, onMounted, computed, nextTick } from 'vue'
   import { useQuasar } from 'quasar'
   import { Form as ValidateForm, Field as ValidateField } from 'vee-validate'
   import { object, string, number, array, ref as yupRef } from 'yup'
@@ -209,7 +210,9 @@ import { Meteor } from 'meteor/meteor'
   import moment from 'moment'
 const store =useStore()
 const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
-
+const currentUser =computed(()=>store.getters['app/currentUserId'])
+// subscribe('alert')
+// const alert = autorun(() => ('has new attendance'))
   const $q = useQuasar()
   const props = defineProps({
     dialog: {
@@ -231,8 +234,8 @@ const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
     status:'active',
     reason:'',
     acceptedById:'',
-    fromDate:'',
-    toDate:'',
+    fromDate:new Date(),
+    toDate: new Date(),
     branchId: '',
   }
   const typeOpts = ref(
@@ -248,43 +251,17 @@ const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
   const form = ref({ ...initForm })
   const visibleDialog = ref(false)
   
-//   const rules = object({
-//     name: string()
-//       .min(4)
-//       .test('exist', 'Name is required', (value) => {
-//         if (!value) return true
-  
-//         let selector = {
-//           // name: {
-//           //   // $regex: new RegExp('^' + value.replace(/%/g, '.*') + '$', 'i'),
-//           //   $regex: new RegExp(value, 'i'),
-//           // },
+    // const formTest=ref({
+    //   title: 'Alert',
+    //   message:
+    //   'Has new attendance',
+    //   icon: 'warning',
+    //   status:'active',
+    //   type:"Leave",
+    //   createBy:currentUser.value,
+    //   branchId:currentBranchId.value
+    // })
 
-//           name: value,
-//         }
-//         if (props.showId) {
-//           selector._id = { $ne: props.showId }
-//         }
-  
-//         return checkExist(selector)
-//           .then((res) => {
-//             return !res
-//           })
-//           .catch(() => false)
-//       }),
-//   })
-  
-//   const checkExist = (selector) => {
-//     return new Promise((resolve, reject) => {
-//       Meteor.call('checkAttenExist', { selector }, (err, res) => {
-//         if (err) {
-//           reject(err)
-//         } else {
-//           resolve(res)
-//         }
-//       })
-//     })
-//   }
   
   const submit = async () => {
     const { valid } = await refForm.value.validate()
@@ -297,6 +274,18 @@ const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
       }
     }
   }
+
+  // const insertNoti=()=>{
+  //   Meteor.call('insertTest',formTest.value,(err,res)=>{
+  //     if(!err){
+  //       console.log('insert noti success')
+  //     }else{
+  //       console.log('insert noti error')
+        
+
+  //     }
+  //   })
+  // }
   
   const insert = () => {
     form.value.branchId = currentBranchId.value
@@ -304,13 +293,20 @@ const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
     doc.fromDate=moment(form.value.fromDate).toDate()
     doc.toDate=moment(form.value.toDate).toDate()
 
+
     Meteor.call('insertLeave', doc, (err, res) => {
       if (err) {
         console.log(err)
         Notify.error({ message: err.reason || err })
       } else {
         Notify.success({ message: 'Success' })
+        console.log('notica',res)
+  //       nextTick(() => {
+  //         insertNoti()
+  // })
+       
         cancel()
+       
       }
     })
   }
@@ -371,7 +367,7 @@ const employees=ref()
     const query = { branchId:currentBranchId.value}
     Meteor.call('fetchEmployee',query,(err,res)=>{
       if(!err){
-        // employees.value=res
+        employees.value=res
         // console.log('success',res)
       }else{
         console.log('fetch employees error')
@@ -400,14 +396,24 @@ onMounted(() => {
       if (value) {
         Meteor.call('getLeaveById', value, (err, res) => {
           form.value = res
-          form.value.fromDate=moment(res.fromDate,).format('YYYY/MM/DD hh:mm');
-          form.value.toDate=moment(res.toDate,).format('YYYY/MM/DD hh:mm');
+          form.value.fromDate=moment(res.fromDate,).format('YYYY-MM-DD HH:mm');
+          form.value.toDate=moment(res.toDate,).format('YYYY-MM-DD HH:mm');
 
         })
       }
     }
   )
 
+    
+  watch(
+    ()=>visibleDialog.value,(value)=>{
+      if(value==true){
+        form.value.toDate=moment(form.value.toDate,).format('YYYY-MM-DD HH:mm');
+        form.value.fromDate=moment(form.value.fromDate,).format('YYYY-MM-DD HH:mm');
+
+      }
+    }
+  )
 
   </script>
   

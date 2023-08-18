@@ -47,8 +47,8 @@
       </template>
       <template #body-cell-tranDate="props">
         <q-td :props="props">
-         
-            {{ props.row.tranDate.toLocaleString('en-GB') }}
+         {{ formatTime(props.row.tranDate) }}
+            <!-- {{ toLocaleString('en-GB') }} -->
          
         </q-td>
       </template>
@@ -71,11 +71,11 @@
           {{ formatTime(props.row.toDate) }}
         </q-td>
       </template>
-      <!-- <template #body-cell-status="props">
+      <template #body-cell-acceptedBy="props">
         <q-td :props="props">
-          {{props.row.status }}
+          {{props.row.acceptedBy}}
         </q-td>
-      </template> -->
+      </template>
       <template #body-cell-action="props">
         <q-td :props="props" v-if="props.row.status === 'active'" >
           <q-btn 
@@ -115,9 +115,16 @@
   import LeaveForm from './LeaveForm.vue'
   import { useStore } from '/imports/store'
   import moment from 'moment'
-import { Meteor } from 'meteor/meteor'
+  import { Meteor } from 'meteor/meteor'
 
+  import { subscribe, autorun } from 'vue-meteor-tracker'
+// import Test from '/imports/api/test/test';
+import Leaves from '/imports/api/leaves/leaves';
 
+//subcribe
+
+subscribe('alert')
+const alert = autorun(() => Leaves.find({status:'active'}).fetch()).result
   // pagination
   const pagination = ref({
     sortBy: 'name',
@@ -127,7 +134,7 @@ import { Meteor } from 'meteor/meteor'
     rowsNumber: 0,
   })
 
-
+//datatable
   const columns = [
     { name: 'tranDate', label: 'Tran Date', field: 'tranDate',align:'left',sort: (a, b) => complicatedCompare(a, b),sortable:true},
     { name: 'employeeName', label: 'Employee', field: 'employeeName',align:'left'},
@@ -135,32 +142,42 @@ import { Meteor } from 'meteor/meteor'
     { name: 'type', label: 'Type', field: 'type',align:'left' },
     { name: 'fromDate', label: 'From Date', field: 'fromDate',align:'left' },
     { name: 'toDate', label: 'To Date', field: 'toDate',align:'left' },
-    { name: 'acceptedById', label: 'Accetped By', field: 'acceptedById',align:'left' },
+    { name: 'acceptedBy', label: 'Accetped By', field: 'acceptedBy',align:'left' },
     // { name: 'branchName', label: 'Branch', field: 'branchName',align:'left' },
     // { name: 'status', label: 'Status', field: 'status',align:'left' },
     { name: 'action', label: 'Status', field: 'action',align:'left' }
   ]
+
+
+  //variable
+  const users =ref([])
   const store =useStore()
-const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
-const currentUser =computed(()=>store.getters['app/userFullName'])
+  const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
+  const currentUser =computed(()=>store.getters['app/currentUserId'])
   const visibleDialog = ref(false)
   const loading = ref(false)
-
   const filter = ref('')
   const data = ref([])
   const showId = ref('')
   
+
+
+
+
+
+
+//methods
+
   const addNew = () => {
     visibleDialog.value = true
   }
   //fromart time date
   const formatTime = (date) => {
 
-return moment(date).format('YYYY/MM/DD hh:mm A')
+return moment(date).format('YYYY-MM-DD hh:mm A')
 }
 
-
-  // method
+//fetch leave
   const fetchData = () => {
     loading.value = true
     const { page, rowsPerPage } = pagination.value
@@ -186,42 +203,35 @@ return moment(date).format('YYYY/MM/DD hh:mm A')
         Notify.error({ message: err.reason || err })
       } else {
         // this.list = res
-        // console.log('fetch leaves success',res.data)
+        console.log('fetch leaves success',res)
         data.value = res.data || []
 
-        // res.data.status==='accepted' || 'canceled' ? display.value= false: display.value =true
+
         pagination.value.rowsNumber = res.total || 0
       }
   
       loading.value = false
     })
   }
+
+  //pagination
   const onChangePagination = (val) => {
     pagination.value = val.pagination
     fetchData()
   }
   
+  //edit leave
   const edit = (row) => {
     visibleDialog.value = true
     showId.value = row._id
   }
-  
+  //close dialog
   const handleClosedDialog = (value) => {
     visibleDialog.value = value
     showId.value = ''
     fetchData()
   }
   
-  // life cycle
-  onMounted(() => {
-    fetchData()
-  })
-  watch(()=>currentBranchId.value,()=>{
-    console.log(currentBranchId.value,)
-    fetchData()
-  })
-
-  const display = ref('true')
 
   // update status
   const updateStatus = (item, status,acceptedById)=>{
@@ -231,12 +241,54 @@ return moment(date).format('YYYY/MM/DD hh:mm A')
       if(!err){
         // console.log('sucess update status')
         fetchData()
-        // display.value=false
+        alert
+      
       }else{
         console.log('error update')
       }
     })
   }
+
+  //fetch user
+  const fetchUser =()=>{
+    Meteor.call('fetchUser',(err,res)=>{
+      if(!err){
+        console.log('user',res)
+        users.value=res
+      }else{
+        console.log('user error',err)
+      }
+    })
+  }
+
+
+
+//onMounted
+
+ // life cycle
+ onMounted(() => {
+    fetchData()
+  })
+  onMounted(()=>
+ fetchUser()
+ )
  
-  </script>
+
+ //watch
+  watch(()=>currentBranchId.value,()=>{
+    console.log(currentBranchId.value,)
+    fetchData()
+  })
+//   watch(()=>
+//  data.value.acceptedById,()=>{
+//     // if(!value) return false 
+
+//     const doc = users.value.find(it=>it._id=value)
+//     console.log('d',doc)
+   
   
+
+//   })
+
+  </script>
+  <!-- ../../api/notifications/test -->

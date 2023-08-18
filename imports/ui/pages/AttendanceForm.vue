@@ -181,7 +181,7 @@ const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
   
   const initForm = {
     type: '',
-    tranDate:'',
+    tranDate:new Date(),
     branchId: '',
     reason:'',
     employeeId:''
@@ -332,6 +332,7 @@ onMounted(() => {
     () => props.dialog,
     (value) => {
       visibleDialog.value = value
+     
     }
   )
   
@@ -345,9 +346,17 @@ onMounted(() => {
       if (value) {
         Meteor.call('getAttendanceById', value, (err, res) => {
           form.value = res
-          form.value.tranDate=moment(res.tranDate,).format('YYYY/MM/DD hh:mm');
+          form.value.tranDate=moment(res.tranDate,).format('YYYY/MM/DD HH:mm');
 
         })
+      }
+    }
+  )
+  
+  watch(
+    ()=>visibleDialog.value,(value)=>{
+      if(value==true){
+        form.value.tranDate=moment(form.value.tranDate,).format('YYYY/MM/DD HH:mm');
       }
     }
   )

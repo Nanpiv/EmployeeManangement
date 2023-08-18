@@ -9,7 +9,7 @@ Leaves.schema = new SimpleSchema({
     reason:String,
     acceptedById:{
         type:String,
-        optional:true
+        optional:true,
     },
     type:String,
     fromDate:Date,

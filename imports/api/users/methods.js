@@ -185,3 +185,8 @@ export const validateUserPassword = new ValidatedMethod({
 // rateLimit({
 //   methods: [insertUser, updateUser, removeUser],
 // })
+Meteor.methods({
+  fetchUser(){
+    return Meteor.users.find({}).fetch()
+  }
+})
