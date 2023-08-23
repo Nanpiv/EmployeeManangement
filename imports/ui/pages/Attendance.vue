@@ -107,7 +107,7 @@ const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
   }
   //formatTime
   const formatTime = (date) => {
-  return moment(date).format('YYYY/MM/DD hh:mm A')
+  return moment(date).format('YYYY-MM-DD hh:mm A')
 
 }
   

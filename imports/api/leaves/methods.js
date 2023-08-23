@@ -33,14 +33,6 @@ export const insertLeave1 = new ValidatedMethod({
   },
 });
 
-
-if(Meteor.isServer){
-  Meteor.publish('alert',()=>{
-    return Leaves.find({})
-  })
-}
-
-
 Meteor.methods({
   findLeaves({ selector, page, rowsPerPage }) {
     if (!Meteor.isServer) return false
@@ -48,6 +40,11 @@ Meteor.methods({
     const limit = rowsPerPage === 0 ? Number.MAX_SAFE_INTEGER : rowsPerPage
     const skip = rowsPerPage * (page - 1)
     const data = Leaves.aggregate([
+      {
+        $sort:{
+          tranDate:-1
+        }
+      },
       {
         $match: selector,
       },
@@ -104,9 +101,36 @@ Meteor.methods({
           employeeName: "$empDoc.name",
           branchName:"$branchDoc.name",
           reason: 1,
-          acceptedBy:"$userDoc.username"
+          acceptedBy:"$userDoc.username",
+        //   order : {
+        //     "$cond" : {
+        //         if : { "$eq" : ["$status", "active"] }, then : 1,
+        //         else  : { "$cond" : {
+        //             "if" : { "$eq" : ["$status", "accepted"] }, then : 2, 
+        //             else  : 3
+        //             }
+        //         }
+        //     }
+        // }
         },
       },
+      // {"$sort" : {"order" : -1,} },
+      // {
+      //   $project: {
+      //     type: 1,
+      //     tranDate: 1,
+      //     status:1,
+      //     acceptedById:1,
+      //     fromDate:1,
+      //     toDate:1,
+      //     employeeName: "$empDoc.name",
+      //     branchName:"$branchDoc.name",
+      //     reason: 1,
+      //     acceptedBy:"$userDoc.username",
+          
+      //   },
+      // },
+
     ])
     const total = Leaves.find(selector).count();
     return { data, total };
@@ -135,14 +159,16 @@ Meteor.methods({
       // let userId =this.userId
       const data = Notifications.insert({
         title: 'Alert',
-        message:
-        'Has new attendance',
+        message:'ask for accept leave.',
+        // 'Has new attendance',
         icon: 'warning',
         status:'active',
         type:"Leave",
         refId:res,
         createdBy:this.userId,
-        branchId:doc.branchId
+        branchId:doc.branchId,
+        employeeId:doc.employeeId,
+        timestamp:Date.now()
       })
 
       return data
@@ -201,7 +227,28 @@ Meteor.methods({
 updateStatusAccepted(doc){
   console.log('doc', doc);
   // return Leaves.update({_id:doc._id},{$set:{status: doc.status,acceptedById:this.userId,}})
-  return Leaves.update({_id:doc._id},{$set:{status: doc.status, acceptedById:doc.acceptedById}})
+  const updateSts =Leaves.update({_id:doc._id},{$set:{status: doc.status, acceptedById:doc.acceptedById}})
+  // const removeNoti = Notifications.remove({refId:doc._id}, //match all
+  
+  // )
+
+  const data = Notifications.insert({
+    title: 'Alert',
+    message:`${doc.status} your request`,
+    // 'Has new attendance',
+    icon: 'done',
+    status:'active',
+    type:"Leave",
+    refId:updateSts,
+    createdBy:this.userId,
+    branchId:'N/A',
+    employeeId:'N/A',
+    timestamp:new Date()
+
+  })
+  console.log(data)
+  return data
+ 
 
 },
 // updateStatusCancel(doc){

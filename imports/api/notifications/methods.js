@@ -1,6 +1,6 @@
 import { Meteor } from "meteor/meteor";
 import Notifications from "./notifications";
-
+import Employee from "../employees/employees";
 
 Meteor.methods({
     insertNotifications (doc){
@@ -18,37 +18,81 @@ Meteor.methods({
         }
         
         )
+    },
+    removeAllNotifi(){
+        return Notifications.remove({})
+    },
+    fetchNoti(selector){
+        selector = selector || {}
+        return Notifications.aggregate([
+            {
+                $match:selector
+            },
+            {
+                $sort:{
+                    timestamp:-1
+                }
+            },
+            {
+                $limit:10
+            },
+                    {
+                        $lookup: {
+                          from: "employees",
+                          localField: "employeeId",
+                          foreignField: "_id",
+                          as: "empDoc",
+                        },
+                      },
+                      { $unwind: {
+                        path:'$empDoc',
+                        "preserveNullAndEmptyArrays": true
+                      }},
+                      {
+                        $project:{
+                            empName:"$empDoc.name",
+                            title: 1,
+                            message:1,
+                            icon: 1,
+                        }
+                      }
+                ])
+    },
+    fetchNoti1(selector){
+        selector = selector || {}
+        return Notifications.aggregate([
+            {
+                $match:selector
+            },
+            {
+                $sort:{
+                    timestamp:-1
+                }
+            },
+                    {
+                        $lookup: {
+                          from: "employees",
+                          localField: "employeeId",
+                          foreignField: "_id",
+                          as: "empDoc",
+                        },
+                      },
+                      { $unwind: {
+                        path:'$empDoc',
+                        "preserveNullAndEmptyArrays": true
+                      }},
+                      {
+                        $project:{
+                            empName:"$empDoc.name",
+                            title: 1,
+                            message:1,
+                            icon: 1,
+                        }
+                      }
+                ])
     }
 })
 
-if(Meteor.isServer){
-    Meteor.publish('notificat',()=>{
-        return Notifications.find({})
-    })
-}
-
-// if(Meteor.isServer){
-//     Meteor.publish('updateNotifi',()=>{
-//         return Notifications.update({}, //match all
-//         {
-//             $set: {
-//                 status: 'readed'
-//             }
-//         }, 
-//         {
-//             multi: true,
-//         }
-        
-//         )
-//     })
-// }
 
 
 
-
-// updateStatusAccepted(doc){
-//     console.log('doc', doc);
-//     // return Leaves.update({_id:doc._id},{$set:{status: doc.status,acceptedById:this.userId,}})
-//     return Leaves.update({_id:doc._id},{$set:{status: doc.status, acceptedById:doc.acceptedById}})
-  
-//   },

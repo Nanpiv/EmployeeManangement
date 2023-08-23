@@ -3,6 +3,7 @@ import Login from "./pages/Login.vue";
 import Employee from "./pages/Employees.vue"
 import Attendance from "./pages/Attendance.vue"
 import Leave from "./pages/Leave.vue"
+import AllNotifications from "./pages/AllNotification.vue";
 // import Notifications from './pages/'
 // Setting
 import AdimSetting from "./pages/AdminSetting.vue";
@@ -40,14 +41,14 @@ export default [
       title: "Leave",
     },
   },
-  // {
-  //   path: "/notifications",
-  //   name: "Notifications",
-  //   component: Notifications,
-  //   meta: {
-  //     title: "Notifications",
-  //   },
-  // },
+  {
+    path: "/allNotifications",
+    name: "AllNotifications",
+    component: AllNotifications,
+    meta: {
+      title: "All Notifications",
+    },
+  },
   {
     path: "/login",
     name: "Login",

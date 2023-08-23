@@ -86,12 +86,11 @@ import { useStore } from '/imports/store'
     { name: 'positionName', label: 'Position', field: 'positionName',align:'left' },
     { name: 'address', label: 'Address', field: 'address',align:'left' },
     { name: 'telephone', label: 'Telephone', field: 'telephone',align:'left' },
-    { name: 'startDate', label: 'Start Date', field: 'startDate' },
-    { name: 'branchName', label: 'Branch', field: 'branchName' },
-    { name: 'checkIn', label: 'Check In', field: 'checkIn' },
-    { name: 'checkOut', label: 'Check Out', field: 'checkOut' },
+    { name: 'startDate', label: 'Start Date', field: 'startDate',align:'left'  },
+    { name: 'branchName', label: 'Branch', field: 'branchName' ,align:'left' },
+    { name: 'checkIn', label: 'Check In', field: 'checkIn',align:'left'  },
+    { name: 'checkOut', label: 'Check Out', field: 'checkOut',align:'left'  },
     // { name: 'token', label: 'Token', field: 'token' },
-
   ]
   const store =useStore()
 const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
@@ -147,7 +146,7 @@ const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
         Notify.error({ message: err.reason || err })
       } else {
         // this.list = res
-        console.log('fetch employee success',res.data)
+        // console.log('fetch employee success',res.data)
         data.value = res.data || []
         pagination.value.rowsNumber = res.total || 0
       }
@@ -176,7 +175,7 @@ const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
     fetchData()
   })
   watch(()=>currentBranchId.value,()=>{
-    console.log(currentBranchId.value,)
+    // console.log(currentBranchId.value,)
     fetchData()
   })
   </script>

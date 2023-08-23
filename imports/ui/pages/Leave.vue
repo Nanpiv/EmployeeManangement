@@ -116,7 +116,7 @@
   import { useStore } from '/imports/store'
   import moment from 'moment'
   import { Meteor } from 'meteor/meteor'
-
+  import { useQuasar } from 'quasar'
   import { subscribe, autorun } from 'vue-meteor-tracker'
 // import Test from '/imports/api/test/test';
 import Leaves from '/imports/api/leaves/leaves';
@@ -159,7 +159,7 @@ const alert = autorun(() => Leaves.find({status:'active'}).fetch()).result
   const filter = ref('')
   const data = ref([])
   const showId = ref('')
-  
+  const $q = useQuasar()
 
 
 
@@ -174,7 +174,7 @@ const alert = autorun(() => Leaves.find({status:'active'}).fetch()).result
   //fromart time date
   const formatTime = (date) => {
 
-return moment(date).format('YYYY-MM-DD hh:mm A')
+return moment(date).format('YYYY/MM/DD HH:mm A')
 }
 
 //fetch leave
@@ -235,7 +235,20 @@ return moment(date).format('YYYY-MM-DD hh:mm A')
 
   // update status
   const updateStatus = (item, status,acceptedById)=>{
-    console.log('status', status);
+    let sts = ''
+    status === 'accepted'? sts= 'accept': sts = 'cancel'
+    $q.dialog({
+    title: 'Confirm',
+    message: `Do you want to ${sts} this leave ?`,
+    cancel: true,
+    ok: {
+      push: true,
+    },
+  })
+    .onOk(() => {
+
+
+      console.log('status', status);
     let _id = item._id
     Meteor.call('updateStatusAccepted', { _id,status,acceptedById} ,(err,res)=>{
       if(!err){
@@ -247,13 +260,19 @@ return moment(date).format('YYYY-MM-DD hh:mm A')
         console.log('error update')
       }
     })
+
+    })
+
+
+
+    
   }
 
   //fetch user
   const fetchUser =()=>{
     Meteor.call('fetchUser',(err,res)=>{
       if(!err){
-        console.log('user',res)
+        // console.log('user',res)
         users.value=res
       }else{
         console.log('user error',err)

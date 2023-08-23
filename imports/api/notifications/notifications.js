@@ -11,7 +11,9 @@ Notifications.schema = new SimpleSchema({
     createdBy:String,
     refId:String, //===res in leave  = id
     status:String,//default active 
-    branchId:String
+    branchId:String,
+    employeeId:String,
+    timestamp:Date
 })
 
 Notifications.attachSchema(Notifications.schema)

@@ -10,16 +10,23 @@
       transition-hide="scale"
     >
       <!-- Header -->
+
+
+ 
+
+
       <q-list style="max-width: 350px">
         <q-item>
           <q-item-section class="text-body1"> Notifications </q-item-section>
+          <p @click="removeAllNotifi" class="btnClear">Clear all</p>
         </q-item>
 
+          
         <q-separator />
-
-        <template v-for="(notiItem, index) in notificat" :key="index">
-          <q-item v-close-popup clickable>
-            {{ notiItem.name }}
+       
+        <template v-for="(notiItem, index) in list" :key="index">
+          <q-item v-close-popup clickable to="/Leave">
+            <!-- {{ notiItem.empName }} -->
             <!-- Icon -->
             <!-- <q-item-section v-if="notiItem.icon" :key="`icon-${index}`" avatar>
               <q-avatar color="primary" text-color="white">
@@ -31,8 +38,8 @@
 
             <q-item-section  avatar>
               <q-avatar color="primary" text-color="white">
-                <!-- <q-icon :name="notiItem.icon" /> -->
-                <q-icon name="warning" />
+                <q-icon :name="notiItem.icon" />
+                <!-- <q-icon name="" /> -->
 
               </q-avatar>
             </q-item-section>
@@ -40,13 +47,13 @@
             <!-- Message -->
             <q-item-section :key="`message-${index}`">
               <q-item-label caption :lines="2" class="text-grey-9 message-text">
-                {{ notiItem.message }}
-                <!-- Has new attendance. -->
+               {{ notiItem.empName}} {{ notiItem.message }}
+            
               </q-item-label>
             </q-item-section>
 
             <q-item-section :key="`timestamp-${index}`" side top>
-              <!-- {{ notiItem.timestamp }} --> just now
+              <!-- {{( currentTime- notiItem.timestamp) * 0.001 % 60}}  -->
             </q-item-section>
           </q-item>
 
@@ -71,11 +78,12 @@
               size="sm"
               class="view-all"
               label="View All"
-              no-caps
+              to="/allNotifications"
             />
           </q-item-section>
         </q-item>
       </q-list>
+     
     </q-menu>
   </q-btn>
 
@@ -97,7 +105,7 @@ import {
 } from 'quasar'
 
 import { Meteor } from 'meteor/meteor';
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 
 import { subscribe, autorun } from 'vue-meteor-tracker'
 // import Leaves from '/imports/api/leaves/leaves';
@@ -105,29 +113,76 @@ import Notifications from '/imports/api/notifications/notifications';
 
 //subcribe
 
-subscribe('notificat')
-const notificat = autorun(() => Notifications.find({}).fetch()).result
-const notifiNum = autorun(() => Notifications.find({status:'active'}).fetch()).result
+// subscribe('notificat')
+const { ready: notiReady } = subscribe(() => [
+  'notificat',
+  {
+    createdBy: Meteor.userId(),
+    status:'active'
+  },
+])
 
-console.log(notificat)
+const {result:notificat} = autorun(() => {
+  if(notiReady.value) return Notifications.find({}).fetch()
+
+  return []
+})
+const currentTime = Date.now()
+
+const list=ref([])
+let notiNumber = ref(0)
 
 const updateNotifi =()=>{
   Meteor.call('updateNotiStatus',(err,res)=>{
     if(!err){
-      console.log('update notifi sucess',res)
+      // console.log('update notifi sucess',res)
+      fetchNoti()
     }else{
       console.log('update notifi error')
     }
   })
 }
 
+const removeAllNotifi = () => {
+  Meteor.call('removeAllNotifi',(err,res)=>{
+    if(!err){
+      // console.log('clear success',res)
+    }else{
+      console.log('clear error',err)
+    }
+  })
+}
 
-// updateStatusAccepted(doc){
-//     console.log('doc', doc);
-//     // return Leaves.update({_id:doc._id},{$set:{status: doc.status,acceptedById:this.userId,}})
-//     return Leaves.update({_id:doc._id},{$set:{status: doc.status, acceptedById:doc.acceptedById}})
+const fetchNoti = () =>{
+  const selector = {
+    createdBy: Meteor.userId(),
+  }
+
+  Meteor.call('fetchNoti',selector,(err,res)=>{
+    if(!err){
+      // console.log('fetch noti success',res)
+      list.value = res
+    }else{
+      console.log('fetch notutt error',err)
+    }
+  })
+}
+
+watch(notificat,(items)=>{
+  //  console.log('items',items)
+   list.value = []
+   notiNumber.value = items.length
+
+fetchNoti()
+})
+
+
+onMounted(()=>{
+  fetchNoti()
+})
+
+
   
-//   },
 
 // const notifications = ref([
 //   {
@@ -148,13 +203,6 @@ const updateNotifi =()=>{
 //   },
 // ])
 
-let notiNumber = ref(0)
-
-watch(()=>notificat.value,(value)=>{
-  notiNumber.value = notifiNum.value.length
-  console.log(notiNumber.value)
-})
-
 </script>
 
 <style lang="scss" scoped>
@@ -172,5 +220,15 @@ watch(()=>notificat.value,(value)=>{
       text-decoration: underline;
     }
   }
+}
+.btnClear{
+  width: 70px;
+    margin: 0 auto;
+    padding: 0;
+    // color: #1565c0;
+    // font-weight: 600;
+    &:hover {
+      text-decoration: underline;
+    }
 }
 </style>
