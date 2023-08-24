@@ -62,13 +62,13 @@
       <template #body-cell-fromDate="props">
         <q-td :props="props">
          
-          {{ formatTime(props.row.fromDate) }}
+          {{formatTime(props.row.fromDate )}}
          
         </q-td>
       </template>
       <template #body-cell-toDate="props">
         <q-td :props="props">
-          {{ formatTime(props.row.toDate) }}
+          {{ formatTime(props.row.toDate)}}
         </q-td>
       </template>
       <template #body-cell-acceptedBy="props">
@@ -76,7 +76,8 @@
           {{props.row.acceptedBy}}
         </q-td>
       </template>
-      <template #body-cell-action="props">
+     
+      <template #body-cell-action="props" v-if="Meteor.userId() == 'ZYDNrkxumdHah5G3i'">
         <q-td :props="props" v-if="props.row.status === 'active'" >
           <q-btn 
           class="q-mr-md"
@@ -100,6 +101,9 @@
          
         </q-td>
       </template>
+      <template #body-cell-status="props" v-else >
+        <q-td :props="props">{{ props.row.status }}</q-td>
+      </template>
     </q-table>
   
     <LeaveForm
@@ -119,7 +123,7 @@
   import { useQuasar } from 'quasar'
   import { subscribe, autorun } from 'vue-meteor-tracker'
 // import Test from '/imports/api/test/test';
-import Leaves from '/imports/api/leaves/leaves';
+  import Leaves from '/imports/api/leaves/leaves';
 
 //subcribe
 
@@ -144,8 +148,8 @@ const alert = autorun(() => Leaves.find({status:'active'}).fetch()).result
     { name: 'toDate', label: 'To Date', field: 'toDate',align:'left' },
     { name: 'acceptedBy', label: 'Accetped By', field: 'acceptedBy',align:'left' },
     // { name: 'branchName', label: 'Branch', field: 'branchName',align:'left' },
-    // { name: 'status', label: 'Status', field: 'status',align:'left' },
-    { name: 'action', label: 'Status', field: 'action',align:'left' }
+    { name: 'status', label: 'Status', field: 'status',align:'left' },
+    { name: 'action', label: 'Action', field: 'action',align:'left' }
   ]
 
 
@@ -162,7 +166,20 @@ const alert = autorun(() => Leaves.find({status:'active'}).fetch()).result
   const $q = useQuasar()
 
 
-
+  const notiform=ref({
+  title: 'Alert',
+    message:`${data.status} your request.`,
+    icon: 'done',
+    status:'active',
+    type:"Approved",
+    refId:'',
+    createdBy:'',
+    toCreatedBy:'',
+    branchId:'',
+    employeeId:'',
+    to:'',
+    timestamp:new Date()
+})
 
 
 
@@ -173,6 +190,7 @@ const alert = autorun(() => Leaves.find({status:'active'}).fetch()).result
   }
   //fromart time date
   const formatTime = (date) => {
+
 
 return moment(date).format('YYYY/MM/DD HH:mm A')
 }
@@ -206,7 +224,7 @@ return moment(date).format('YYYY/MM/DD HH:mm A')
         console.log('fetch leaves success',res)
         data.value = res.data || []
 
-
+   
         pagination.value.rowsNumber = res.total || 0
       }
   
@@ -250,7 +268,7 @@ return moment(date).format('YYYY/MM/DD HH:mm A')
 
       console.log('status', status);
     let _id = item._id
-    Meteor.call('updateStatusAccepted', { _id,status,acceptedById} ,(err,res)=>{
+    Meteor.call('updateStatusAccepted', { _id,status,acceptedById,} ,(err,res)=>{
       if(!err){
         // console.log('sucess update status')
         fetchData()
@@ -260,12 +278,7 @@ return moment(date).format('YYYY/MM/DD HH:mm A')
         console.log('error update')
       }
     })
-
     })
-
-
-
-    
   }
 
   //fetch user
@@ -310,4 +323,4 @@ return moment(date).format('YYYY/MM/DD HH:mm A')
 //   })
 
   </script>
-  <!-- ../../api/notifications/test -->
+  

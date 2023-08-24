@@ -102,34 +102,7 @@ Meteor.methods({
           branchName:"$branchDoc.name",
           reason: 1,
           acceptedBy:"$userDoc.username",
-        //   order : {
-        //     "$cond" : {
-        //         if : { "$eq" : ["$status", "active"] }, then : 1,
-        //         else  : { "$cond" : {
-        //             "if" : { "$eq" : ["$status", "accepted"] }, then : 2, 
-        //             else  : 3
-        //             }
-        //         }
-        //     }
-        // }
-        },
-      },
-      // {"$sort" : {"order" : -1,} },
-      // {
-      //   $project: {
-      //     type: 1,
-      //     tranDate: 1,
-      //     status:1,
-      //     acceptedById:1,
-      //     fromDate:1,
-      //     toDate:1,
-      //     employeeName: "$empDoc.name",
-      //     branchName:"$branchDoc.name",
-      //     reason: 1,
-      //     acceptedBy:"$userDoc.username",
-          
-      //   },
-      // },
+        }}
 
     ])
     const total = Leaves.find(selector).count();
@@ -165,10 +138,12 @@ Meteor.methods({
         status:'active',
         type:"Leave",
         refId:res,
+        toCreatedBy:'',
         createdBy:this.userId,
         branchId:doc.branchId,
         employeeId:doc.employeeId,
-        timestamp:Date.now()
+        timestamp:Date.now(),
+        to:'ZYDNrkxumdHah5G3i'
       })
 
       return data
@@ -224,29 +199,31 @@ Meteor.methods({
    return Leaves.findOne({_id})
   },
 
-updateStatusAccepted(doc){
+updateStatusAccepted(doc,refId){
   console.log('doc', doc);
   // return Leaves.update({_id:doc._id},{$set:{status: doc.status,acceptedById:this.userId,}})
-  const updateSts =Leaves.update({_id:doc._id},{$set:{status: doc.status, acceptedById:doc.acceptedById}})
+ const updateSts= Leaves.update({_id:doc._id},{$set:{status: doc.status, acceptedById:doc.acceptedById}})
   // const removeNoti = Notifications.remove({refId:doc._id}, //match all
-  
-  // )
+  const findNoti= Notifications.findOne({ refId: doc._id, })
+
 
   const data = Notifications.insert({
     title: 'Alert',
-    message:`${doc.status} your request`,
+    message:`leave has been ${doc.status}`,
     // 'Has new attendance',
     icon: 'done',
     status:'active',
-    type:"Leave",
-    refId:updateSts,
-    createdBy:this.userId,
-    branchId:'N/A',
-    employeeId:'N/A',
-    timestamp:new Date()
+    type:"Approved",
+    refId:findNoti._id,
+    createdBy:findNoti.createdBy,
+    toCreatedBy:findNoti.createdBy,
+    branchId:findNoti.branchId,
+    employeeId:findNoti.employeeId,
+    timestamp:Date.now(),
+    to:findNoti.createdBy
 
   })
-  console.log(data)
+  console.log('data',data)
   return data
  
 
@@ -282,7 +259,10 @@ fetchLeave (selector){
         as: "empDoc",
       },
     },
-    { $unwind: "$empDoc" },
+    { $unwind: {
+      path:'$empDoc',
+      "preserveNullAndEmptyArrays": true
+    }},
   
     {
       $project: {

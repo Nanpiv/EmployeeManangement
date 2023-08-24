@@ -38,8 +38,23 @@
                   <!-- from date -->
                   <div class="col-12">
                     <q-input readonly filled label="From Date" v-model="form.fromDate">
-
                       <template v-slot:prepend>
+                        <q-icon :name="form.type=='Full' ? 'event' : 'access_time'" class="cursor-pointer">
+                          <q-popup-proxy transition-show="scale" transition-hide="scale" >
+                            <q-date v-if="form.type=='Full'" v-model="form.fromDate" color="orange" text-color="white"
+                              bordered>
+                            </q-date>
+
+                              <q-time v-else v-model="form.fromDate" :mask="mask" >
+                                <div class="row items-center justify-end">
+                                  <q-btn v-close-popup label="Close" color="primary" flat />
+                                </div>
+                              </q-time>
+                          </q-popup-proxy>
+                        </q-icon>
+                      </template>
+
+                      <!-- <template v-slot:prepend>
                         <q-icon name="event" class="cursor-pointer" v-show="display">
                           <q-popup-proxy transition-show="scale" transition-hide="scale">
                             <q-date v-model="form.fromDate" color="orange" text-color="white" bordered></q-date>
@@ -49,7 +64,7 @@
                       <template v-if="form.type === 'Time'" v-slot:append>
                         <q-icon name="access_time" class="cursor-pointer" v-show="displayTime">
                           <q-popup-proxy cover transition-show="scale" transition-hide="scale" v-show="displayDateIcon">
-                            <q-time v-model="form.fromDate">
+                            <q-time v-model="form.fromDate" mask="YYYY/MM/DD HH:mm"  >
                               <div class="row items-center justify-end">
                                 <q-btn v-close-popup label="Close" color="primary" flat />
                               </div>
@@ -60,14 +75,14 @@
                       <template v-else v-slot:append>
                         <q-icon name="access_time" class="cursor-pointer" v-show="displayTime">
                           <q-popup-proxy cover transition-show="scale" transition-hide="scale" v-show="displayDateIcon">
-                            <q-time v-model="form.fromDate" mask="YYYY/MM/DD hh:mm" >
+                            <q-time v-model="form.fromDate" mask="YYYY/MM/DD HH:mm" >
                               <div class="row items-center justify-end">
                                 <q-btn v-close-popup label="Close" color="primary" flat />
                               </div>
                             </q-time>
                           </q-popup-proxy>
                         </q-icon>
-                      </template>
+                      </template> -->
                     </q-input>
 
                   </div>
@@ -76,18 +91,45 @@
                     <q-input readonly filled label="To Date" v-model="form.toDate">
 
 
-                      <template v-slot:prepend>
+                      <!-- <template v-slot:prepend>
                         <q-icon name="event" class="cursor-pointer" v-show="display">
                           <q-popup-proxy transition-show="scale" transition-hide="scale" v-show="displayDateIcon">
                             <q-date v-model="form.toDate" :options="minDate" color="orange" text-color="white"
                               bordered></q-date>
                           </q-popup-proxy>
                         </q-icon>
+                      </template> -->
+
+                      <template v-slot:prepend>
+                        <q-icon :name="form.type=='Full' ? 'event' : 'access_time'" class="cursor-pointer" >
+                          <q-popup-proxy transition-show="scale" transition-hide="scale" >
+                            <q-date v-if="form.type=='Full'" v-model="form.toDate" :options="minDate" color="orange" text-color="white"
+                              bordered>
+                            </q-date>
+
+                              <q-time v-else v-model="form.toDate" :mask="mask" >
+                                <div class="row items-center justify-end">
+                                  <q-btn v-close-popup label="Close" color="primary" flat />
+                                </div>
+                              </q-time>
+                          </q-popup-proxy>
+                        </q-icon>
                       </template>
-                      <template v-if="form.type === 'Time'" v-slot:append>
+                      <!-- <template v-slot:append>
+                        <q-icon name="access_time" class="cursor-pointer" v-show="displayTime">
+                            <q-popup-proxy cover transition-show="scale" transition-hide="scale">
+                              <q-time v-model="form.toDate" :mask="mask" >
+                                <div class="row items-center justify-end">
+                                  <q-btn v-close-popup label="Close" color="primary" flat />
+                                </div>
+                              </q-time>
+                            </q-popup-proxy>
+                          </q-icon>
+                      </template> -->
+                      <!-- <template v-if="form.type === 'Time'" v-slot:append>
                         <q-icon name="access_time" class="cursor-pointer" v-show="displayTime">
                           <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                            <q-time v-model="form.toDate"  >
+                            <q-time v-model="form.toDate" mask="YYYY/MM/DD hh:mm"  >
                               <div class="row items-center justify-end">
                                 <q-btn v-close-popup label="Close" color="primary" flat />
                               </div>
@@ -105,7 +147,7 @@
                             </q-time>
                           </q-popup-proxy>
                         </q-icon>
-                      </template>
+                      </template> -->
                     </q-input>
                   </div>
                 </div>
@@ -141,11 +183,12 @@ import { Form as ValidateForm, Field as ValidateField } from 'vee-validate'
 import { object, string, number, array, ref as yupRef } from 'yup'
 import { Meteor } from 'meteor/meteor'
 import moment from 'moment'
+
+
+//variable
 const store = useStore()
 const currentBranchId = computed(() => store.getters['app/currentBranchId'])
 const currentUser = computed(() => store.getters['app/currentUserId'])
-// subscribe('alert')
-// const alert = autorun(() => ('has new attendance'))
 const $q = useQuasar()
 const props = defineProps({
   dialog: {
@@ -158,25 +201,20 @@ const props = defineProps({
   },
 })
 
-
-
-// const minDate = computed(()=>{
-
-//   return  form.value.fromDate <= form.value.toDate;
-// })
 const emit = defineEmits(['closed'])
-
+const mask = ref('YYYY/MM/DD')
 const initForm = {
-  type: '',
+  type: 'Full',
   tranDate: new Date(),
   employeeId: '',
   status: 'active',
   reason: '',
   acceptedById: '',
-  fromDate: new Date(),
-  toDate: new Date(),
+  fromDate: moment().format('YYYY/MM/DD'),
+  toDate: moment().add(1,'d').format('YYYY/MM/DD'),
   branchId: '',
 }
+
 const typeOpts = ref(
   [
     'Full',
@@ -192,65 +230,56 @@ const display = ref(true)
 const displayTime = ref(true)
 // data properties
 const refForm = ref()
+const firstShowForm = ref(false)
 const form = ref({ ...initForm })
 const visibleDialog = ref(false)
 
-// const rules = object({
-//   formDdate: Date()
-//     .min()
-//     .test('exist', 'Name is required', (value) => {
-//       if (!value) return true
+const convertDateTime = (strTime) => {
+const curr = moment()
+const splitStrTime = strTime.split(':')
 
-//       let selector = {
-//         // name: {
-//         //   // $regex: new RegExp('^' + value.replace(/%/g, '.*') + '$', 'i'),
-//         //   $regex: new RegExp(value, 'i'),
-//         // },
-//         name: value,
-//       }
-//       if (props.showId) {
-//         selector._id = { $ne: props.showId }
-//       }
+ curr.hours(splitStrTime[0])
+ curr.minutes(splitStrTime[1])
 
-//       return checkExist(selector)
-//         .then((res) => {
-//           return !res
-//         })
-//         .catch(() => false)
-//     }),
-// })
+ return curr.toDate()
+}
 
-
-
+//method
 
 const submit = async () => {
   const { valid } = await refForm.value.validate()
 
   if (valid) {
-    if (form.value._id) {
-      update()
-    } else {
+    // if (form.value._id) {
+    //   update()
+    // } else {
       insert()
-    }
+    // }
   }
 }
 const insert = () => {
   form.value.branchId = currentBranchId.value
   const doc = { ...form.value };
+
   doc.fromDate = moment(form.value.fromDate).toDate()
   doc.toDate = moment(form.value.toDate).toDate()
 
+  if(form.value.type==='Time'){
+    doc.fromDate = convertDateTime(form.value.fromDate)
+  doc.toDate = convertDateTime(form.value.toDate)
+  }
 
-  Meteor.call('insertLeave', doc, (err, res) => {
+  let methodName = 'insertLeave'
+  if(form.value._id) methodName = 'updateLeave'
+
+  Meteor.call(methodName, doc, (err, res) => {
     if (err) {
       console.log(err)
       Notify.error({ message: err.reason || err })
     } else {
       Notify.success({ message: 'Success' })
       console.log('notica', res)
-
       cancel()
-
     }
   })
 }
@@ -274,7 +303,7 @@ const update = () => {
 const remove = () => {
   $q.dialog({
     title: 'Confirm',
-    message: `Do you want to remove [${form.value.type}] ?`,
+    message: `Do you want to remove this leave ?`,
     cancel: true,
     ok: {
       push: true,
@@ -305,7 +334,7 @@ const cancel = () => {
   emit('closed', false)
 }
 
-
+//formate disable date
 const minDate = (date) => {
   const validate=ref();
   const today = moment(form.value.fromDate,).format("YYYY/MM/DD");
@@ -317,13 +346,6 @@ const minDate = (date) => {
   }
   return validate.value
 }
-
-const minTime=(date)=>{
-  const today = moment(form.value.fromDate,).format("HH:mm");
-  return date >= today;
-}
-
-
 
 
 //call department
@@ -344,6 +366,10 @@ onMounted(() => {
   fetchEmployee()
 }),
 
+
+
+//watch
+
   watch(
     () => props.dialog,
     (value) => {
@@ -360,77 +386,89 @@ watch(
   () => props.showId,
   (value) => {
     if (value) {
+      firstShowForm.value = true
       Meteor.call('getLeaveById', value, (err, res) => {
-        form.value = res
-        if (form.value.type === 'Time') {
-          form.value.toDate = moment(res.toDate,).format('HH:mm');
-          form.value.fromDate = moment(res.fromDate,).format('HH:mm');
-          display.value = false
-          displayTime.value = true
-        }
-        else if (form.value.type === 'Full') {
+        form.value = {...res}
+     
           form.value.toDate = moment(res.toDate,).format('YYYY/MM/DD');
           form.value.fromDate = moment(res.fromDate).format('YYYY/MM/DD');
-          displayTime.value = false
-          display.value = true
-        }
-        else if (form.value.type === 'Morning') {
-          form.value.toDate = moment(res.toDate,).format("YYYY/MM/DD HH:mm");
-          form.value.fromDate = moment(res.fromDate,).format("YYYY/MM/DD HH:mm");
-          displayDateIcon.value = false
-          displayTime.value = true
-          display.value = false
-        } else if (form.value.type === 'Afternoon') {
-          form.value.toDate = moment(res.toDate).format("YYYY/MM/DD HH:mm");
-          form.value.fromDate = moment(res.fromDate,).format("YYYY/MM/DD HH:mm");
-          displayDateIcon.value = false
-          displayTime.value = true
-          display.value = false
-        }
+         
+        
+        if(res.type=='Time') {
+          form.value.toDate = moment(res.toDate,).format("HH:mm");
+          form.value.fromDate = moment(res.fromDate,).format("HH:mm");
+         
+        } 
+
+        console.log('form',form.value,res)
+
+        nextTick(()=>{
+          firstShowForm.value = false
+        })
+       
       })
     }
   }
 )
 //watch when open dialog
-watch(
-  () => visibleDialog.value, (value) => {
-    if (value == true) {
-      form.value.toDate = moment(form.value.toDate,).format('YYYY/MM/DD HH:mm');
-      form.value.fromDate = moment(form.value.fromDate,).format('YYYY/MM/DD HH:mm');
-    }
-  }
-)
+// watch(
+//   () => visibleDialog.value, (value) => {
+//     if (value == true) {
+//       form.value.toDate = moment(form.value.toDate,).format('YYYY/MM/DD HH:mm');
+//       form.value.fromDate = moment(form.value.fromDate,).format('YYYY/MM/DD HH:mm');
+//     }
+//   }
+// )
 //watch when select type
-watch(() => form.value.type, () => {
-  if (form.value.type === 'Time') {
-    form.value.toDate = moment(new Date(),).format('HH:mm');
-    form.value.fromDate = moment(new Date(),).format('HH:mm');
-    display.value = false
-    displayTime.value = true
-  }
-  else if (form.value.type === 'Full') {
-    let today =form.value.fromDate
-    form.value.toDate = moment(today,).add(1,'d').format("YYYY/MM/DD");
-    // form.value.toDate = moment(new Date(),).format('YYYY/MM/DD');
-    form.value.fromDate = moment(new Date(),).format('YYYY/MM/DD');
-    displayTime.value = false
-    display.value = true
-  }
-  else if (form.value.type === 'Morning') {
-    form.value.toDate = moment(new Date(),).format("YYYY/MM/DD HH:mm");
-    form.value.fromDate = moment(new Date(),).format("YYYY/MM/DD HH:mm");
-    displayDateIcon.value = false
+watch(() => form.value.type, (val) => {
+  mask.value = 'YYYY/MM/DD'
+  if(val=='Time') mask.value = 'HH:mm'
 
-    displayTime.value = true
-    display.value = false
-  } else if (form.value.type === 'Afternoon') {
-    let today =form.value.fromDate
-    form.value.toDate = moment(new Date()).format("YYYY/MM/DD HH:mm");
-    form.value.fromDate = moment(new Date(),).format("YYYY/MM/DD HH:mm");
-    displayDateIcon.value = false
-    displayTime.value = true
-    display.value = false
+  if(firstShowForm.value) return false;
+  
+  form.value.toDate = moment().format("YYYY/MM/DD");
+  form.value.fromDate = moment().format("YYYY/MM/DD");
+
+  if(val== 'Full'){
+    
+    form.value.fromDate = moment(new Date()).add(1,'d').format("YYYY/MM/DD");
+    form.value.fromDate = moment().format("YYYY/MM/DD");
+  }else if
+
+  (val=='Time'){
+    form.value.fromDate = moment(new Date(),).format("HH:mm");
+    form.value.toDate = moment(new Date(),).format("HH:mm");
+    
   }
+  else{
+    mask.value="YYYY/MM/DD HH:mm"
+    form.value.fromDate = moment(new Date(),).format("YYYY/MM/DD HH:mm");
+    form.value.toDate = moment(new Date(),).format("YYYY/MM/DD HH:mm");
+  }
+  // else{
+  // form.value.toDate = moment().format("YYYY/MM/DD HH:mm");
+  // form.value.fromDate = moment().format("YYYY/MM/DD HH:mm");
+
+  // }
+  
+// if(!props.showId){
+//   if (form.value.type === 'Full') {
+//     let today =new Date()
+//     form.value.toDate = moment(today,).add(1,'d').format("YYYY/MM/DD");
+//     // form.value.toDate = moment(new Date(),).format('YYYY/MM/DD');
+//     form.value.fromDate = moment(new Date(),).format('YYYY/MM/DD');
+//     displayTime.value = false
+//     display.value = true
+//   }
+//   else  {
+//     form.value.toDate = moment(new Date(),).format("YYYY/MM/DD HH:mm");
+//     form.value.fromDate = moment(new Date(),).format("YYYY/MM/DD HH:mm");
+//     displayDateIcon.value = false
+
+//     displayTime.value = true
+//     display.value = false
+//   } 
+// }
 }
 
 )

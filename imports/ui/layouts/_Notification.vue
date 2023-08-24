@@ -18,7 +18,7 @@
       <q-list style="max-width: 350px">
         <q-item>
           <q-item-section class="text-body1"> Notifications </q-item-section>
-          <p @click="removeAllNotifi" class="btnClear">Clear all</p>
+          <!-- <p @click="removeAllNotifi" class="btnClear">Clear all</p> -->
         </q-item>
 
           
@@ -47,7 +47,11 @@
             <!-- Message -->
             <q-item-section :key="`message-${index}`">
               <q-item-label caption :lines="2" class="text-grey-9 message-text">
-               {{ notiItem.empName}} {{ notiItem.message }}
+               <!-- <template v-for="i in notiItem.name" :key="i">
+                {{ i}}
+               </template> -->
+               {{ notiItem.empName }}
+               {{ notiItem.message }}
             
               </q-item-label>
             </q-item-section>
@@ -117,7 +121,8 @@ import Notifications from '/imports/api/notifications/notifications';
 const { ready: notiReady } = subscribe(() => [
   'notificat',
   {
-    createdBy: Meteor.userId(),
+    // createdBy: Meteor.userId(),
+    to:Meteor.userId(),
     status:'active'
   },
 ])
@@ -147,6 +152,7 @@ const removeAllNotifi = () => {
   Meteor.call('removeAllNotifi',(err,res)=>{
     if(!err){
       // console.log('clear success',res)
+      fetchNoti()
     }else{
       console.log('clear error',err)
     }
@@ -155,18 +161,21 @@ const removeAllNotifi = () => {
 
 const fetchNoti = () =>{
   const selector = {
-    createdBy: Meteor.userId(),
+    // createdBy: Meteor.userId(),
+    to:Meteor.userId()
   }
 
-  Meteor.call('fetchNoti',selector,(err,res)=>{
+  Meteor.call('fetchNoti1',selector,(err,res)=>{
     if(!err){
-      // console.log('fetch noti success',res)
+      console.log('fetch noti success',res)
       list.value = res
     }else{
       console.log('fetch notutt error',err)
     }
   })
 }
+
+
 
 watch(notificat,(items)=>{
   //  console.log('items',items)
