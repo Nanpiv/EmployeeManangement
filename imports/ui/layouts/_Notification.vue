@@ -37,7 +37,7 @@
             </q-item-section> -->
 
             <q-item-section  avatar>
-              <q-avatar color="primary" text-color="white">
+              <q-avatar :color="notiItem.icon=='close'?'red':'primary'" text-color="white">
                 <q-icon :name="notiItem.icon" />
                 <!-- <q-icon name="" /> -->
 
