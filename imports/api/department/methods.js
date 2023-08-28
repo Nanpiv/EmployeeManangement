@@ -119,6 +119,9 @@ Meteor.methods({
       },
       fetchDepartment(selector) {
         return Departments.find(selector).fetch()
+      },
+      countDepart(selector){
+     return Departments.find(selector).count()
       }
 })
 

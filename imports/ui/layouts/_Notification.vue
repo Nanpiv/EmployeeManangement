@@ -1,5 +1,7 @@
 <template>
-  <q-btn flat round dense icon="notifications" @click="updateNotifi()">
+  <!-- <q-btn flat round dense icon="notifications" @click="notiNumber==0?'':updateNotifi()"> -->
+  <q-btn flat round dense icon="notifications" @click="notiNumber==0?'':updateNotifi()">
+
     <q-badge color="red" floating transparent>
       {{ notiNumber }}
     </q-badge>
@@ -141,9 +143,10 @@ const list=ref([])
 let notiNumber = ref(0)
 
 const updateNotifi =()=>{
-  Meteor.call('updateNotiStatus',(err,res)=>{
+ const selector={to:Meteor.userId()}
+  Meteor.call('updateNotiStatus',selector,(err,res)=>{
     if(!err){
-      // console.log('update notifi sucess',res)
+      console.log('update notifi sucess',res)
       fetchNoti()
     }else{
       console.log('update notifi error')
@@ -170,7 +173,7 @@ const fetchNoti = () =>{
 
   Meteor.call('fetchNoti1',selector,(err,res)=>{
     if(!err){
-      // console.log('fetch noti success',res)
+      console.log('fetch noti success',res)
       list.value = res
     }else{
       console.log('fetch notutt error',err)

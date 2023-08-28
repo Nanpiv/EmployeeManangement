@@ -6,8 +6,9 @@ Meteor.methods({
     insertNotifications (doc){
         return Notifications.insert(doc)
     },
-    updateNotiStatus(){
-        return Notifications.update({}, //match all
+    updateNotiStatus(doc){
+      // const findNoti= Notifications.find({ to: doc.to, })
+        return Notifications.update({to:doc.to}, //match all
         {
             $set: {
                 status: 'readed'
@@ -95,7 +96,6 @@ Meteor.methods({
                       },
                       {
                         $project:{
-                            
                             title: 1,
                             message:1,
                             icon: 1,

@@ -12,9 +12,49 @@
           :color="infoBox.color"
           :icon-color="infoBox.iconColor"
           :title="infoBox.title"
-          :number="infoBox.number"
+          :number=department
           :currency="infoBox.currency"
         />
+      </div>
+      <div
+    style=""
+        class="row col-xs-12 col-sm-6 col-md-3"
+      >
+       <info-box
+          icon="fa-solid fa-code-branch"
+          color="bg-light-blue-9"
+          icon-color="blue-9"
+          title="Branch"
+          :number=department
+          
+          
+        />
+        <info-box
+          icon="group"
+          color="bg-cyan-8"
+          icon-color="cyan-8"
+          title="Department"
+          :number=department
+          
+        />
+        <!-- 
+        <info-box
+          icon="fa-solid fa-code-branch"
+          color="bg-light-blue-9"
+          icon-color="blue-9"
+          title="Branch"
+          :number=department
+          
+        />
+        <info-box
+          icon="fa-solid fa-code-branch"
+          color="bg-light-blue-9"
+          icon-color="blue-9"
+          title="Branch"
+          :number=department
+          
+        /> -->
+      
       </div>
     </div>
 
@@ -83,12 +123,16 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref,computed } from 'vue'
 
 // Components
 import LineChart from '../components/dashboard/LineChart.vue'
 import DoughnutChart from '../components/dashboard/DoughnutChart.vue'
 import InfoBox from '../components/dashboard/InfoBox.vue'
+import { Meteor } from 'meteor/meteor'
+import { useStore } from '/imports/store'
+const store =useStore()
+const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
 
 const userList = ref([
   {
@@ -135,32 +179,32 @@ const userList = ref([
 
 const infoBoxList = ref([
   {
-    icon: 'settings_applications',
+    icon: 'fa-solid fa-code-branch',
     color: 'bg-light-blue-9',
     iconColor: 'blue-9',
     title: 'Branch',
-    number: '70',
+    number: '99',
     currency: '%',
   },
   {
-    icon: 'local_grocery_store',
+    icon: 'group',
     color: 'bg-cyan-8',
     iconColor: 'cyan-8',
-    title: 'sales',
-    number: '230',
+    title: 'Department',
+    number:'89',
   },
   {
-    icon: 'thumb_up_alt',
+    icon: 'fa-solid fa-users-gear',
     color: 'bg-deep-orange-9',
     iconColor: 'deep-orange-9',
-    title: 'likes',
+    title: 'Position',
     number: '500+',
   },
   {
-    icon: 'group_add',
+    icon: 'fa-solid fa-users',
     color: 'bg-green-7',
     iconColor: 'green-7',
-    title: 'followers',
+    title: 'Employee',
     number: '350+',
   },
 ])
@@ -206,6 +250,26 @@ const infoBoxList2 = ref([
     description: '40% Increase in 30 Days',
   },
 ])
+
+
+const department =ref('')
+const totalDepart =()=>{
+  
+  const selector ={branchId:currentBranchId.value}
+  Meteor.call('countDepart',selector,(err,res)=>{
+    if(!err){
+      department.value = res
+      console.log('success',res)
+    }else{
+      console.log('error find department',err)
+    }
+  })
+}
+onMounted(()=>{
+  totalDepart()
+})
+
+// watch(()=>{})
 </script>
 
 <style lang="scss" scoped>
