@@ -138,7 +138,7 @@ const infoBoxList = ref([
     icon: 'settings_applications',
     color: 'bg-light-blue-9',
     iconColor: 'blue-9',
-    title: 'cpu traffic',
+    title: 'Branch',
     number: '70',
     currency: '%',
   },

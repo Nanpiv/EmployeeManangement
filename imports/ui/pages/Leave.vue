@@ -33,7 +33,10 @@
       </template>
       <template #body-cell-employeeName="props">
         <q-td :props="props">
-          <span @click="edit(props.row)" class="ra-text-link">
+          <span @click="edit(props.row)" class="ra-text-link" v-if="props.row.status==='active' && Meteor.userId() !=='ZYDNrkxumdHah5G3i'">
+            {{ props.row.employeeName }}
+          </span>
+          <span v-else>
             {{ props.row.employeeName }}
           </span>
         </q-td>
@@ -124,9 +127,9 @@
   import { subscribe, autorun } from 'vue-meteor-tracker'
 // import Test from '/imports/api/test/test';
   import Leaves from '/imports/api/leaves/leaves';
-
+import { useRoute } from 'vue-router'
 //subcribe
-
+const route =useRoute()
 subscribe('alert')
 const alert = autorun(() => Leaves.find({status:'active'}).fetch()).result
   // pagination
@@ -140,7 +143,7 @@ const alert = autorun(() => Leaves.find({status:'active'}).fetch()).result
 
 //datatable
   const columns = [
-    { name: 'tranDate', label: 'Tran Date', field: 'tranDate',align:'left',sort: (a, b) => complicatedCompare(a, b),sortable:true},
+    { name: 'tranDate', label: 'Tran Date', field: 'tranDate',align:'left',},
     { name: 'employeeName', label: 'Employee', field: 'employeeName',align:'left'},
     { name: 'reason', label: 'Reason', field: 'reason',align:'left' },
     { name: 'type', label: 'Type', field: 'type',align:'left' },

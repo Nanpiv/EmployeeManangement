@@ -25,7 +25,7 @@
         <q-separator />
        
         <template v-for="(notiItem, index) in list" :key="index">
-          <q-item v-close-popup clickable to="/Leave">
+          <q-item v-close-popup clickable to="/leave">
             <!-- {{ notiItem.empName }} -->
             <!-- Icon -->
             <!-- <q-item-section v-if="notiItem.icon" :key="`icon-${index}`" avatar>
@@ -107,7 +107,9 @@ import {
   QBadge,
   QMenu,
 } from 'quasar'
-
+import Notify from '../lib/notify';
+import { useQuasar } from 'quasar';
+import { useRouter } from 'vue-router';
 import { Meteor } from 'meteor/meteor';
 import { computed, onMounted, ref, watch } from 'vue';
 
@@ -115,7 +117,8 @@ import { subscribe, autorun } from 'vue-meteor-tracker'
 // import Leaves from '/imports/api/leaves/leaves';
 import Notifications from '/imports/api/notifications/notifications';
 
-//subcribe
+const $q = useQuasar()
+const router =useRouter()
 
 // subscribe('notificat')
 const { ready: notiReady } = subscribe(() => [
@@ -167,7 +170,7 @@ const fetchNoti = () =>{
 
   Meteor.call('fetchNoti1',selector,(err,res)=>{
     if(!err){
-      console.log('fetch noti success',res)
+      // console.log('fetch noti success',res)
       list.value = res
     }else{
       console.log('fetch notutt error',err)
@@ -181,8 +184,9 @@ watch(notificat,(items)=>{
   //  console.log('items',items)
    list.value = []
    notiNumber.value = items.length
-
+//  Notify.success({ message: 'Have new notifications' })
 fetchNoti()
+
 })
 
 
@@ -211,6 +215,9 @@ onMounted(()=>{
 //     // route: { name: 'alert' },
 //   },
 // ])
+// const pushRoute = (branchId) =>{
+//     router.push({name: 'Leave',query:{branchId: branchId}})
+// }
 
 </script>
 

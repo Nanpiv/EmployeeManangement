@@ -124,8 +124,8 @@
                   </span>
                 </td>
                 <td>{{ doc.type }}</td>
-                <td >{{ doc.fromDate.toLocaleString() }}</td>
-                <td >{{ doc.toDate.toLocaleString() }}</td>
+                <td >{{ formatTime(doc.fromDate) }}</td>
+                <td >{{ formatTime(doc.toDate) }}</td>
                 <td>{{ doc.reason }}</td>
                 <td>{{ doc.status }}</td>
                 <td>{{ doc.acceptedBy }}</td>
@@ -204,11 +204,17 @@
   }
 
     //fromart time date
- const formatTime = (date) => {
-return moment(date).format('YYYY/MM/DD hh:mm A')
-}
+ 
   }
 
+  const formatTime = (date) => {
+return moment(date).format('YYYY/MM/DD hh:mm A')
+}
+
+watch(()=>currentBranchId.value,()=>{
+   
+  fetchLeave()
+ })
   onMounted(()=>
   fetchLeave()
   )

@@ -108,13 +108,13 @@
                   </span>
                 </td>
                 <td>{{ doc.type }}</td>
-                <td >{{ doc.tranDate.toLocaleString() }}</td>
+                <td >{{ formatDate(doc.tranDate) }}</td>
                 <td>{{ doc.reason }}</td>
-                <td v-if="doc.type==='checkIn'">{{ doc.checkIn.toLocaleTimeString() }}</td>
-                <td v-else>{{ doc.checkOut.toLocaleTimeString() }}</td>
+                <td v-if="doc.type==='checkIn'">{{ formatTime(doc.checkIn) }}</td>
+                <td v-else>{{ formatTime(doc.checkOut) }}</td>
 
-                <td v-if="doc.type==='checkIn'">{{ doc.checkIn.toLocaleTimeString()<doc.tranDate.toLocaleTimeString()?'Late':'Good' }}</td>
-                <td v-else>{{ doc.checkOut.toLocaleTimeString() < doc.tranDate.toLocaleTimeString()?'Good':'Bad' }}</td>
+                <td v-if="doc.type==='checkIn'">{{ doc.checkIn.toLocaleTimeString()<=doc.tranDate.toLocaleTimeString()?'Late':'Good' }}</td>
+                <td v-else>{{ doc.checkOut.toLocaleTimeString() <= doc.tranDate.toLocaleTimeString()?'Good':'Bad' }}</td>
 
                 <!-- <td v-if="showMoreHeader('address')">{{ doc.address }}</td> -->
               </tr>
@@ -183,11 +183,21 @@
       }
   })
 
+  }
+
+
     //fromart time date
- const formatTime = (date) => {
+ const formatDate = (date) => {
 return moment(date).format('YYYY/MM/DD hh:mm A')
 }
-  }
+const formatTime = (date) => {
+return moment(date).format('hh:mm A')
+}
+
+watch(()=>currentBranchId.value,()=>{
+   
+    fetchAttendances()
+  })
 
   onMounted(()=>
   fetchAttendances()

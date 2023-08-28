@@ -102,6 +102,7 @@ Meteor.methods({
                             timestamp:1,
                             empName: 1,
                             brachName:1,
+                            branchId:1
 
                             
                         }

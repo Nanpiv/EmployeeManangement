@@ -27,7 +27,7 @@ import { Meteor } from 'meteor/meteor';
 import moment from 'moment';
 
 const columns=[
-  {name:'empName',label:'Form',field:'empName',align:'left'},
+  {name:'empName',label:'Employee',field:'empName',align:'left'},
   {name:'message',label:'Message',field:'message',align:'left' },
   {name:'timestamp',label:'Date',field:'timestamp',align:'left' },
   {name:'brachName',label:'Branch',field:'brachName',align:'left' }
@@ -46,7 +46,7 @@ const fetchNoti = () =>{
 
   Meteor.call('fetchNoti1',selector,(err,res)=>{
     if(!err){
-      console.log('fetch noti success',res)
+      // console.log('fetch noti success',res)
       list.value = res
     }else{
       console.log('fetch notutt error',err)
