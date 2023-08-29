@@ -386,7 +386,7 @@ watch(
   () => props.showId,
   (value) => {
     if (value) {
-      firstShowForm.value = true
+      // firstShowForm.value = true
       Meteor.call('getLeaveById', value, (err, res) => {
         form.value = {...res}
      

@@ -16,7 +16,7 @@
           :currency="infoBox.currency"
         />
       </div>
-      <div
+      <!-- <div
     style=""
         class="row col-xs-12 col-sm-6 col-md-3"
       >
@@ -37,7 +37,7 @@
           :number=department
           
         />
-        <!-- 
+        
         <info-box
           icon="fa-solid fa-code-branch"
           color="bg-light-blue-9"
@@ -53,9 +53,9 @@
           title="Branch"
           :number=department
           
-        /> -->
+        />
       
-      </div>
+      </div> -->
     </div>
 
     <div class="row q-col-gutter-x-md q-col-gutter-y-xs q-mb-md">
