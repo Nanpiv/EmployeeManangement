@@ -1,6 +1,8 @@
 import { Meteor } from 'meteor/meteor'
 import { Accounts } from 'meteor/accounts-base'
 
+import { initRoles } from './initRoles'
+
 Meteor.startup(async () => {
   // Super
   const superAccount = Accounts.findUserByUsername('super')
@@ -19,4 +21,8 @@ Meteor.startup(async () => {
 
     Accounts.createUser(user)
   }
+
+  // Fixture role
+  await initRoles();
+
 })
