@@ -11,6 +11,7 @@ Role.schema = new SimpleSchema({
   group: {
     type: String,
   },
+  title: String,
   order: Number,
 })
 
