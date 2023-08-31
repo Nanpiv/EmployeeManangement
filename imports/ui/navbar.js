@@ -8,26 +8,25 @@ export default [
     title: "Employee",
     route: { name: "Employee" },
     icon: "fa-solid fa-users",
+    roles: ['insertEmployee','updateEmployee','removeEmployee'],
   },
   {
     title: "Attendance",
     route: { name: "Attendance" },
     icon: "fa-solid fa-list-check",
+    roles: ['insertAttendance','updateAttendance','removeAttendance'],
   },
   {
     title: "Leave",
     route: { name: "Leave" },
     icon: "fa-solid fa-list",
+    roles: ['insertLeave','updateLeave','removeLeave'],
   },
-  // {
-  //   title: "Notifications",
-  //   route: { name: "Notifications" },
-  //   icon: "fa-solid fa-list",
-  // },
   {
     title: "Report",
     route: { name: "Report" },
     icon: "fa-solid fa-file-contract",
+    roles: ['insertReport','updateReport','removeReport'],
   },
   {
     title: 'Admin Setting',
@@ -47,19 +46,21 @@ export default [
         route: { name: "AdminSetting", params: { activeCom: "branch" } },
         icon: 'fa-solid fa-code-branch',
         group: "admin",
+        roles: ['insertBranch','updateBranch','removeBranch'],
       },
       {
         title: "Department",
         route: { name: "AdminSetting", params: { activeCom: "department" } },
         icon: "fa-solid fa-user",
         group: "admin",
+        roles: ['insertDepartment','updateDepartment','removeDepartment'],
       },
       {
         title: "Position",
         route: { name: "AdminSetting", params: { activeCom: "position" } },
         group: "admin",
         icon: "fa-solid fa-users-gear",
-        // roles: ['admin'],
+        roles: ['insertPosition','updatePosition','removePosition'],
       },
       {
         title: "EmployeeType",
@@ -67,7 +68,7 @@ export default [
         group: "admin",
         icon: "fa-solid fa-users-gear",
         // roles: ['admin'],
-        roles: ['insertBranch','updateBranch','removeBranch'],
+        roles: ['insertEmployeeType','updateEmployeeType','removeEmployeeType'],
       },
      
       {

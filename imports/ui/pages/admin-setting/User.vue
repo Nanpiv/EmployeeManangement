@@ -74,7 +74,8 @@
         <template #body-cell-roleGroup="props">
           <q-td :props="props">
             <span>
-              {{ formatRoleGroup(props.row.roleGroup) }}
+              <!-- {{ formatRoleGroup(props.row.roleGroup) }} -->
+              {{ props.row.roleGroup }}
             </span>
           </q-td>
         </template>
@@ -178,6 +179,7 @@ const getDataTable = () => {
   })
     .then((result) => {
       dataTable.value = result
+      console.log(result)
     })
     .catch((error) => {
       Notify.error({ message: error.reason || error })
@@ -221,9 +223,9 @@ const formatRoleGroup = (roleGroups) => {
   roleGroups.forEach((roleGroup, index) => {
     content += `${roleGroup.name} `
 
-    if (index + 1 < roleGroups.length) {
-      content += ','
-    }
+    // if (index + 1 < roleGroups.length) {
+    //   content += ','
+    // }
   })
 
   return content

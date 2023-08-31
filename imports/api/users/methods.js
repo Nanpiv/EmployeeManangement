@@ -59,11 +59,13 @@ export const findUsers = new ValidatedMethod({
                 name: '$branchDoc.name',
               },
             },
-            roleGroup: {
-              $push: {
-                name: '$groupDoc.name',
-              },
-            },
+            // roleGroup: {
+            //   $push: {
+            //     name: '$groupDoc.name',
+            //   },
+            // },
+            roleGroup:{$last:'$groupDoc.name'}
+            
           },
         },
       ])

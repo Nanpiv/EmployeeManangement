@@ -80,7 +80,7 @@
         </q-td>
       </template>
      
-      <template #body-cell-action="props" v-if="Meteor.userId() == 'ZYDNrkxumdHah5G3i'">
+      <template #body-cell-action="props" v-if="$userIsInRole(['acceptLeave'])">
         <q-td :props="props" v-if="props.row.status === 'active'" >
           <q-btn 
           class="q-mr-md"
