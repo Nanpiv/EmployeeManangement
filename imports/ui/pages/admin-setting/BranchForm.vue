@@ -155,13 +155,23 @@
                   label="Save"
                   color="primary"
                   :loading="loading"
+                v-if="$userIsInRole('insertBranch') && !showId"
                   no-caps
                   @click="submit()"
                 ></q-btn>
                 <q-btn
-                  v-if="showId"
+                  label="Save"
+                  color="primary"
+                  :loading="loading"
+                v-else-if="$userIsInRole('updateBranch') && showId"
+                  no-caps
+                  @click="submit()"
+                ></q-btn>
+                <q-btn
+                  v-if="showId && $userIsInRole('removeBranch')"
                   label="Remove"
                   :loading="loading"
+                  
                   no-caps
                   color="negative"
                   @click="remove"

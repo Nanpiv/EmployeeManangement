@@ -1,10 +1,10 @@
 <template>
-  <q-card class="my-card">
+  <q-card class="my-card" >
     <q-card-section>
       <div class="row collapse-list">
         <template v-for="(item, index) in list" :key="index">
-          <div class="list-title" style="width: 30%; margin-right: 2.5%">
-            <div class="content-panel" @click="handleLink(item.route)">
+          <div class="list-title" style="width: 30%; margin-right: 2.5%" >
+            <div class="content-panel" @click="handleLink(item.route)" >
               <i class="fa-solid fa-file-contract"></i>
               {{ item.title }}
             </div>

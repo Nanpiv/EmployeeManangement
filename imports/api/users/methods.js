@@ -107,6 +107,8 @@ export const insertUser = new ValidatedMethod({
           fullName: user.fullName,
           status: user.status,
           allowedBranches: user.allowedBranches,
+          roleGroup:user.roleGroup,
+          roles:user.roles
         },
       })
 
@@ -134,6 +136,8 @@ export const updateUser = new ValidatedMethod({
               fullName: user.fullName,
               status: user.status,
               allowedBranches: user.allowedBranches,
+              roleGroup:user.roleGroup,
+             roles:user.roles
             },
           },
         }

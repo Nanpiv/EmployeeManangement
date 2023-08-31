@@ -34,15 +34,15 @@ export const UserInsertSchema = new SimpleSchema({
   "allowedBranches.$": {
     type: String,
   },
-  // roleGroup: {
-  //   type: String,
-  // },
-  // roles: {
-  //   type: Array,
-  // },
-  // 'roles.$': {
-  //   type: String,
-  // },
+  roleGroup: {
+    type: String,
+  },
+  roles: {
+    type: Array,
+  },
+  'roles.$': {
+    type: String,
+  },
 });
 
 export const UserUpdateSchema = new SimpleSchema({
@@ -83,13 +83,13 @@ export const UserUpdateSchema = new SimpleSchema({
   "allowedBranches.$": {
     type: String,
   },
-  // roleGroup: {
-  //   type: String,
-  // },
-  // roles: {
-  //   type: Array,
-  // },
-  // 'roles.$': {
-  //   type: String,
-  // },
+  roleGroup: {
+    type: String,
+  },
+  roles: {
+    type: Array,
+  },
+  'roles.$': {
+    type: String,
+  },
 });

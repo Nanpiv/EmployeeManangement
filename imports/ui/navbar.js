@@ -40,6 +40,7 @@ export default [
         route: { name: 'AdminSetting', params: { activeCom: 'profile' } },
         icon: 'fa-solid fa-user-circle',
         group: 'admin',
+        
       },
       {
         title: "Branch",
@@ -66,20 +67,22 @@ export default [
         group: "admin",
         icon: "fa-solid fa-users-gear",
         // roles: ['admin'],
+        roles: ['insertBranch','updateBranch','removeBranch'],
       },
-      // {
-      //   title: 'Employee',
-      //   route: { name: 'AdminSetting', params: { activeCom: 'employee' } },
-      //   group: 'admin',
-      //   icon: 'fa-solid fa-users',
-      //   // roles: ['admin'],
-      // },
+     
       {
         title: 'User',
         route: { name: 'AdminSetting', params: { activeCom: 'user' } },
         group: 'admin',
         icon: 'fa-solid fa-users',
-        // roles: ['admin'],
+        roles: ['insertUser,updateUser','removeUser'],
+      },
+      {
+        title: 'Group',
+        route: { name: 'AdminSetting', params: { activeCom: 'group' } },
+        group: 'admin',
+        icon: 'fa-solid fa-users',
+        roles: ['insertRoleGroup','updateRoleGroup','removeRoleGroup'],
       },
     ],
   },

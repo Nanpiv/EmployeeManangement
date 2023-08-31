@@ -1,5 +1,5 @@
 <template>
-  <q-drawer show-if-above v-model="drawer" :width="250" side="left">
+  <q-drawer show-if-above v-model="drawer" :width="250" side="left" >
     <!-- Sidebar header -->
     <q-toolbar class="app-sidebar-header shadow-none absolute-top">
       <img src="/images/rabbit.png" width="30" height="30" class="q-ml-xs" />
@@ -9,12 +9,12 @@
     </q-toolbar>
 
     <!-- Sidebar content -->
-    <q-scroll-area class="app-sidebar-scroll-area">
-      <q-list padding class="app-menu">
-        <template v-for="(menuItem, index) in navbarItems" :key="index">
+    <q-scroll-area class="app-sidebar-scroll-area" >
+      <q-list padding class="app-menu"  >
+        <template v-for="(menuItem, index) in newNavBar" :key="index" >
           <!-- Header -->
           <q-item-label
-            v-if="menuItem.header"
+            v-if="menuItem.header "
             header
             class="q-pa-sm text-caption"
           >
@@ -22,16 +22,17 @@
           </q-item-label>
 
           <!-- Separator -->
-          <q-separator v-else-if="menuItem.separator" />
+          <q-separator v-else-if="menuItem.separator " />
 
           <!-- Have sub menu -->
           <div
-            v-else-if="menuItem.children"
+            v-else-if="menuItem.children "
             :id="menuItem.group"
             @mouseenter="hoverMenuWithChild(menuItem, true)"
             @mouseleave="hoverMenuWithChild(menuItem, false)"
           >
             <q-expansion-item
+           
               :value="activeGroup == menuItem.group"
               :expand-separator="false"
               :icon="menuItem.icon"
@@ -43,7 +44,7 @@
               expand-icon-class="hidden"
               @click="pushRouter(menuItem.route)"
             >
-              <template #header>
+              <template #header >
                 <q-item-section v-if="menuItem.icon" avatar>
                   <q-icon :name="menuItem.icon" size="16px" />
                 </q-item-section>
@@ -54,6 +55,7 @@
               </template>
 
               <q-item
+              
                 v-for="(childMenuItem, childIndex) in menuItem.children"
                 :key="childIndex"
                 v-ripple
@@ -72,16 +74,17 @@
 
           <!-- No sub menu -->
           <q-item
-            v-else
+            v-else-if="$userIsInRole(['viewDashboard'])"
             v-ripple
             clickable
             :active="activeRouterName === menuItem?.route?.name"
+            
             @click="pushRouter(menuItem.route)"
           >
             <q-item-section v-if="menuItem.icon" avatar>
               <q-icon :name="menuItem.icon" size="16px" />
             </q-item-section>
-            <q-item-section>{{ menuItem.title }}</q-item-section>
+            <q-item-section >{{ menuItem.title }}</q-item-section>
           </q-item>
         </template>
       </q-list>
@@ -122,7 +125,7 @@ export default {
 }
 </script>
 <script setup>
-import { reactive, watch, nextTick, ref } from 'vue'
+import { reactive, watch, nextTick, ref,inject, computed } from 'vue'
 // withDefaults,
 //   defineProps,
 //   defineEmits,
@@ -160,7 +163,7 @@ const props =
 //     drawerState: true,
 //   }
 // )
-
+const userIsInRole = inject('$userIsInRole')
 const emit = defineEmits(['state-change'])
 
 const drawer = ref(true) //props.drawerState,
@@ -170,6 +173,54 @@ const subMenuTarget = ref(false)
 const subMenuList = ref([])
 const isHovering = ref(false)
 const navbarItems = ref([...navbar])
+
+
+const newNavBar =computed(()=>{
+  const list =[]
+
+  for(let i=0;i<navbarItems.value.length;i++){
+    const item =navbarItems.value[i]
+    if(item.children?.length){
+      const child=[]
+      for(let it of item.children){
+        if(it.roles){
+          if(userIsInRole(it.roles)){
+            child.push(it)
+          }
+        }else{
+          child.push(it)
+        }
+      }
+      if(child.length){
+        item.children=child
+        list.push(item)
+      }
+    }else{
+      // list.push(item)
+     
+      if(item.roles){
+        if(userIsInRole(item.roles)){
+        list.push(item)
+      }
+      }else{
+        list.push(item)
+      }
+      
+    }
+    //new
+  //  if(!item.children?.length){
+  //   const data=[]
+  //   if(item.roles){
+  //     if(userIsInRole(item.roles)){
+  //       data.push(item)
+  //     }
+  //   }else{
+  //     list.push(item)
+  //   }
+  //  }
+  }
+  return list
+})
 
 // Methods
 const findActiveGroup = (activeRouterName) => {

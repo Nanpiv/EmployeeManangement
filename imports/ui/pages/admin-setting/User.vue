@@ -15,6 +15,7 @@
               color="primary"
               no-caps
               @click="addNew"
+              v-if="$userIsInRole(['insertUser'])"
             >
               Add New
             </q-btn>

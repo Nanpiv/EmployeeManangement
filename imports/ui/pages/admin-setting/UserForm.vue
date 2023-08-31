@@ -81,6 +81,7 @@
                         />
                       </validate-field>
                     </div>
+                    
                   </div>
                 </div>
 
@@ -243,6 +244,34 @@
                         </div>
                       </validate-field>
                     </div>
+                    <div class="col-12">
+                      <validate-field
+                        v-slot="{ value, field, errorMessage }"
+                        v-model="form.roleGroup"
+                        name="roleGroup"
+                      >
+                        <q-select
+                          dense
+                          outlined
+                          :model-value="value"
+                          label="Role Group"
+                          :options="roleGroups"
+                          v-bind="field"
+                          map-options
+                          clearable
+                          emit-value
+                          option-value="_id"
+                          option-label="name"
+                        />
+                        <div
+                          v-if="!!errorMessage"
+                          class="text-negative"
+                          style="font-size: 11px"
+                        >
+                          {{ errorMessage }}
+                        </div>
+                      </validate-field>
+                    </div>
 
                     <div class="col-12">
                       <validate-field
@@ -277,6 +306,23 @@
                     </div>
                   </div>
                 </div>
+                <div class="col col-md-12 ">
+                      <validate-field
+                        v-slot="{ value, field }"
+                        v-model="form.roles"
+                        name="roles"
+                      >
+                        <q-input
+                          :model-value="value"
+                          label="Roles"
+                          outlined
+                          dense
+                          v-bind="field"
+                          multiple
+                          
+                        />
+                      </validate-field>
+                    </div>
               </div>
             </q-card-section>
 
@@ -289,9 +335,18 @@
                   :loading="loading"
                   no-caps
                   @click="submit()"
+                  v-if="$userIsInRole(['insertUser','updateUser']) && !showId"
                 ></q-btn>
                 <q-btn
-                  v-if="showId"
+                  label="Save"
+                  color="primary"
+                  :loading="loading"
+                  no-caps
+                  @click="submit()"
+                  v-else-if="$userIsInRole(['updateUser']) && showId"
+                ></q-btn>
+                <q-btn
+                  v-if="showId && $userIsInRole(['removeUser'])"
                   label="Remove"
                   :loading="loading"
                   no-caps
@@ -325,7 +380,8 @@ import Notify from '../../lib/notify'
 // Composables
 import useMethod from '../../composables/useMethod'
 import { useQuasar } from 'quasar'
-
+import { Meteor } from 'meteor/meteor'
+import lodash_ from 'lodash'
 const props = defineProps({
   value: {
     type: Boolean,
@@ -358,13 +414,15 @@ const initForm = () => {
     confirmPassword: '',
     status: 'Active',
     allowedBranches: [],
+    roleGroup:'',
+    roles:[]
   }
 }
 
 const branchOpts = ref([])
 const formRef = ref(null)
 const form = ref(initForm())
-
+const roleGroups = ref([])
 const rules = object({
   username: string()
     .min(5)
@@ -427,6 +485,9 @@ const rules = object({
 })
 
 const isUpdatePassword = ref(false)
+const startCast =(str)=>{
+  return lodash_.startCase(str)
+}
 
 const statusOpts = ref([
   { label: 'Active', value: 'Active' },
@@ -464,6 +525,8 @@ const getUpdateDoc = () => {
         email: result.emails[0].address,
         status: result.profile.status,
         allowedBranches: result.profile.allowedBranches,
+        roleGroup:result.profile.roleGroup,
+          roles:result.profile.roles
       }
       isUpdatePassword.value = false
     })
@@ -544,11 +607,36 @@ const cancel = () => {
   reset()
 }
 
+const getRoleGroups=()=>{
+Meteor.call('findRoleGroup',(err,res)=>{
+  if(!err){
+    roleGroups.value= res
+    console.log(roleGroups.value)
+  }else{
+    console.log('get role group err')
+  }
+})
+}
+
+
+
 onMounted(() => {
   if (showId.value) {
     getUpdateDoc()
   }
   getBrachOpts()
+})
+onMounted(()=>{
+  getRoleGroups()
+})
+
+watch(()=>form.value.roleGroup,(val)=>{
+  if(!val) return false
+
+const doc = roleGroups.value.find(ex => ex._id ==val)
+form.value.roles = doc.roles
+
+console.log(doc.roles)
 })
 </script>
 

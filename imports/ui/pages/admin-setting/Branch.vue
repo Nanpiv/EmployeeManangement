@@ -15,6 +15,7 @@
               color="primary"
               no-caps
               @click="addNew"
+              v-if="$userIsInRole(['insertBranch'])"
             >
               Add New
             </q-btn>
@@ -36,8 +37,8 @@
         </template>
 
         <template #body-cell-name="props">
-          <q-td :props="props">
-            <span
+          <q-td :props="props" >
+            <span   v-if="$userIsInRole(['insertBranch'])"
               class="ra-text-link"
               @click="edit(props.row)"
             >
