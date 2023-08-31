@@ -39,15 +39,15 @@ export const findUsers = new ValidatedMethod({
           },
         },
         { $unwind: { path: '$branchDoc', preserveNullAndEmptyArrays: true } },
-        // {
-        //   $lookup: {
-        //     from: 'app_roleGroups',
-        //     localField: 'profile.roleGroup',
-        //     foreignField: '_id',
-        //     as: 'groupDoc',
-        //   },
-        // },
-        // { $unwind: { path: '$groupDoc', preserveNullAndEmptyArrays: true } },
+        {
+          $lookup: {
+            from: 'app_roleGroups',
+            localField: 'profile.roleGroup',
+            foreignField: '_id',
+            as: 'groupDoc',
+          },
+        },
+        { $unwind: { path: '$groupDoc', preserveNullAndEmptyArrays: true } },
         {
           $group: {
             _id: '$_id',
@@ -57,6 +57,11 @@ export const findUsers = new ValidatedMethod({
             allowedBranches: {
               $push: {
                 name: '$branchDoc.name',
+              },
+            },
+            roleGroup: {
+              $push: {
+                name: '$groupDoc.name',
               },
             },
           },

@@ -41,55 +41,26 @@ export const initRoles = async () => {
       order: 5
     },
     {
-      name: 'viewBranch',
-      group: 'User',
+      name: 'insertUser',
+      group: 'Admin',
       title: 'Form',
-      order: 4
+      order: 5
     },
     {
-      name: 'viewReportBranch',
-      group: 'User',
-      title: 'Report',
-      order: 4
+      name: 'updateUser',
+      group: 'Admin',
+      title: 'Form',
+      order: 5
     },
     {
-      name: ' viewUser',
-      group: 'User',
-      title: 'SideBar',
-      order: 4
+      name: 'removeUser',
+      group: 'Admin',
+      title: 'Form',
+      order: 5
     },
-    {
-      name: ' updateUser',
-      group: 'User',
-      title: 'SideBar',
-      order: 4
-    },
-    {
-      name: ' removeUser',
-      group: 'User',
-      title: 'SideBar',
-      order: 4
-    },
-    {
-      name: ' viewReport',
-      group: 'User',
-      title: 'SideBar',
-      order: 4
-    },
-    {
-      name: ' viewUserProfile',
-      group: 'User',
-      title: 'SideBar',
-      order: 4
-    },
-    {
-      name:'viewDashboard',
-      group:'User',
-      title:'SideBar',
-      order:4
-    }
+  
   ]
- 
+
 
   // Loop check exist role
   for (let i = 0; i < roles.length; i++) {

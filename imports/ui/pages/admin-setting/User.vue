@@ -74,7 +74,7 @@
         <template #body-cell-roleGroup="props">
           <q-td :props="props">
             <span>
-              {{ props.row.profile.roleGroup }}
+              {{ formatRoleGroup(props.row.roleGroup) }}
             </span>
           </q-td>
         </template>
@@ -150,6 +150,12 @@ const columns = ref([
     field: 'allowedBranches',
   },
   {
+    name: 'roleGroup',
+    label: 'Role Group',
+    align: 'left',
+    field: 'roleGroup',
+  },
+  {
     name: 'status',
     label: 'Status',
     align: 'left',
@@ -204,6 +210,18 @@ const formatBranches = (branches) => {
     content += `${branch.name} `
 
     if (index + 1 < branches.length) {
+      content += ','
+    }
+  })
+
+  return content
+}
+const formatRoleGroup = (roleGroups) => {
+  let content = ''
+  roleGroups.forEach((roleGroup, index) => {
+    content += `${roleGroup.name} `
+
+    if (index + 1 < roleGroups.length) {
       content += ','
     }
   })

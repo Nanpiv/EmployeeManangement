@@ -27,9 +27,12 @@ Meteor.methods({
       const exist = RoleGroup.findOne({ _id:id })
       if (!exist) throw `This recored deleted!`
 
+      const roleG = Meteor.users.findOne({'profile.roleGroup':id})
+      if(roleG) throw `This role has been used`
+
       return RoleGroup.remove({ _id:id })
     } catch (error: any) {
-      throw new Error('delete role group error', error)
+      throw new Meteor.Error('delete role group error', error)
     }
   },
   getRoles( selector ) {

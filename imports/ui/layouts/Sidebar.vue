@@ -74,7 +74,7 @@
 
           <!-- No sub menu -->
           <q-item
-            v-else-if="$userIsInRole(['viewDashboard'])"
+            v-else
             v-ripple
             clickable
             :active="activeRouterName === menuItem?.route?.name"

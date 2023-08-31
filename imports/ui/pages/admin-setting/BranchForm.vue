@@ -15,9 +15,7 @@
           @click="cancel()"
         />
       </q-toolbar>
-
       <q-separator />
-
       <q-card-section>
         <validate-form
           ref="formRef"

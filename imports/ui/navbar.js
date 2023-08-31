@@ -75,7 +75,7 @@ export default [
         route: { name: 'AdminSetting', params: { activeCom: 'user' } },
         group: 'admin',
         icon: 'fa-solid fa-users',
-        roles: ['insertUser,updateUser','removeUser'],
+        roles: ['insertUser','updateUser','removeUser'],
       },
       {
         title: 'Group',

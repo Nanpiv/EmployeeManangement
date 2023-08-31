@@ -4,7 +4,6 @@
       <q-card-section>
         <div class="text-h6">Group</div>
       </q-card-section>
-
       <q-card-section>
         <validate-form ref="refForm" :validation-schema="rules">
           <q-form @submit.prevent>
@@ -17,54 +16,32 @@
                         :error-message="errorMessage"></q-input>
                     </validate-field>
                   </div>
-                  <!-- <div class="q-pa-md" v-for="(post, i) in list" :key="i">
-                      {{ post.name }}
-                    <q-checkbox v-model="form.role" />
-                  </div> -->
-
-
-
-                </div>
-              </div>
-
-              <div class="col-xs-12 col-md-6 col-lg-6">
-                <div class="row q-col-gutter-y-sm">
-
-                  <!-- <div class="col-12">
-                    <validate-field v-slot="{ value, field }" v-model="form.status" name="status">
-                      <span class="text-grey-9" style="padding-right: 8px">
-                        Status
-                      </span>
-
-                      <q-option-group :model-value="value" :options="statusOpts" color="primary" v-bind="field" inline
-                        style="display: inline-block" />
-                    </validate-field>
-                  </div> -->
                 </div>
               </div>
               <div style="width: 100%;">
-
-                <q-tabs  v-model="tab" align="left" dense class="text-black" active-color="primary"
+                <q-tabs v-model="tab" align="left" dense class="text-black" active-color="primary"
                   indicator-color="primary" narrow-indicator>
-                  <q-tab v-for="(item,index) in data" :key="index" :name="item._id" :label="item._id" />
+                  <q-tab v-for="(item, index) in data" :key="index" :name="item._id" :label="item._id" />
                 </q-tabs>
                 <q-separator />
-
-                <q-tab-panels   v-for="(item,index) in data" :key="index" v-model="tab" >
+                <q-tab-panels v-for="(item, index) in data" :key="index" v-model="tab">
                   <q-tab-panel :name="item._id">
-                    <template v-for="(i,key) in item.details" :key="key">
+                    <template v-for="(i, key) in item.details" :key="key">
                       <fieldset>
                         <legend>{{ i.title }}</legend>
-                        <div class="text-h6 q-pa-md " >
-                          <div class="q-pa-md  text-black" >
-                            <div class=" row q-gutter-xl "  >
-                              <template v-for="(it,key) in i.list" :key="key">
-                              <q-checkbox  v-model="form.roles" :val="it.name" color="primary">{{ startCast(it.name)}}</q-checkbox>
+                        <div class="q-pa-md ">
+                          <div class="  text-black">
+                            <div class=" row " style="font-size: medium;">
+                              <template v-for="(it, key) in i.list" :key="key">
+                                <div class="col-4">
+                                  <q-checkbox v-model="form.roles" :val="it.name" color="primary">{{
+                                    startCast(it.name) }}</q-checkbox>
+                                </div>
                               </template>
                             </div>
                           </div>
                         </div>
-                    </fieldset>
+                      </fieldset>
                     </template>
                   </q-tab-panel>
                 </q-tab-panels>
@@ -72,21 +49,16 @@
             </div>
           </q-form>
         </validate-form>
-
       </q-card-section>
-
       <q-card-actions align="right" class="bg-white text-teal">
         <div class="text-right q-gutter-sm">
-          <q-btn color="primary" @click="submit"  v-if="$userIsInRole(['insertRoleGroup']) && !showId"> Save </q-btn>
-          <q-btn color="primary" @click="submit"  v-else-if="$userIsInRole(['updateRoleGroup']) && showId"> Save </q-btn>
-
+          <q-btn color="primary" @click="submit" v-if="$userIsInRole(['insertRoleGroup']) && !showId"> Save </q-btn>
+          <q-btn color="primary" @click="submit" v-else-if="$userIsInRole(['updateRoleGroup']) && showId"> Save </q-btn>
           <q-btn v-if="showId && $userIsInRole('removeRoleGroup')" color="red" @click="remove"> Remove </q-btn>
           <q-btn outline color="primary" @click="cancel"> Cancel </q-btn>
         </div>
       </q-card-actions>
     </q-card>
-
-
   </q-dialog>
 </template>
 <script>
@@ -103,9 +75,8 @@ import { Form as ValidateForm, Field as ValidateField } from 'vee-validate'
 import { object, string, number, array, ref as yupRef } from 'yup'
 import { Meteor } from 'meteor/meteor'
 import lodash_ from 'lodash'
-
-const tab=ref('Admin')
-const check =ref([])
+const tab = ref('Admin')
+const check = ref([])
 const $q = useQuasar()
 const props = defineProps({
   dialog: {
@@ -260,27 +231,8 @@ watch(
   }
 )
 
-const list = ref([])
-// const getRoles = () => {
-//   const selector = {
-//     group: groupBy.value,
-
-//   }
-//   Meteor.call('getRoles', selector, (err, res) => {
-//     if (!err) {
-//       console.log('role', res)
-//       list.value = res
-//     } else {
-//       console.log(err, 'error role')
-//     }
-//   })
-// }
 const data = ref([])
 const get = () => {
-  // const selector={
-
-
-
   Meteor.call('getRolesValue', (err, res) => {
     if (!err) {
       // console.log('role', res)
@@ -295,14 +247,13 @@ const get = () => {
 
 onMounted(() => {
   // getRoles(),
-    get()
+  get()
 })
 // const groupBy = ref('Admin')
-const newData =ref([])
+const newData = ref([])
 
-const startCast =(str)=>{
+const startCast = (str) => {
   return lodash_.startCase(str)
 }
-
 </script>
   

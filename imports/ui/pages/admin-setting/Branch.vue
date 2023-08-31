@@ -38,7 +38,7 @@
 
         <template #body-cell-name="props">
           <q-td :props="props" >
-            <span   v-if="$userIsInRole(['insertBranch'])"
+            <span 
               class="ra-text-link"
               @click="edit(props.row)"
             >
