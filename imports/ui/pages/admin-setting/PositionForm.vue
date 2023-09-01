@@ -11,7 +11,7 @@
         </q-card-section>
   
         <q-card-section>
-          <validate-form ref="refForm" :validation-schema="rules">
+          <validate-form ref="formRef" :validation-schema="rules">
             <q-form @submit.prevent>
               <div class="row q-col-gutter-x-xl q-col-gutter-y-md">
                 <div class="col-xs-12 col-md-6 col-lg-6">
@@ -133,19 +133,21 @@ const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
   
   const emit = defineEmits(['closed'])
   
-  const initForm = {
+  const initForm = ()=>{
+    return {
     name: '',
     departmentId:'',
     branchId: '',
     status: 'active',
+  }
   }
   const statusOpts = [
     { label: 'Active', value: 'active' },
     { label: 'Inactive', value: 'inactive' },
   ]
   // data properties
-  const refForm = ref()
-  const form = ref({ ...initForm })
+  const formRef = ref(null)
+  const form = ref(initForm())
   const visibleDialog = ref(false)
   
   const rules = object({
@@ -187,7 +189,7 @@ const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
   }
   
   const submit = async () => {
-    const { valid } = await refForm.value.validate()
+    const { valid } = await formRef.value.validate()
   
     if (valid) {
       if (form.value._id) {
@@ -206,7 +208,7 @@ const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
         Notify.error({ message: err.reason || err })
       } else {
         Notify.success({ message: 'Success' })
-        cancel()
+        reset()
       }
     })
   }
@@ -245,11 +247,8 @@ const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
     })
   }
   const reset = () => {
-    // refForm.value.resetValidation()
-    // refForm.value.reset()
-    // console.log(refForm.value)
-    delete form.value._id
-    form.value = { ...initForm }
+    formRef.value?.resetForm()
+    form.value = initForm()
   }
   
   // cancel

@@ -207,17 +207,6 @@ const newNavBar =computed(()=>{
       }
       
     }
-    //new
-  //  if(!item.children?.length){
-  //   const data=[]
-  //   if(item.roles){
-  //     if(userIsInRole(item.roles)){
-  //       data.push(item)
-  //     }
-  //   }else{
-  //     list.push(item)
-  //   }
-  //  }
   }
   return list
 })

@@ -6,28 +6,28 @@
       </q-card-section>
 
       <q-card-section>
-        <validate-form ref="refForm" :validation-schema="rules">
+        <validate-form ref="formRef" :validation-schema="rules">
           <q-form @submit.prevent>
             <div class="row q-col-gutter-x-xl q-col-gutter-y-md">
               <div class="col-xs-12 col-md-6 col-lg-6">
                 <div class="row q-col-gutter-y-sm">
-
+                  <!-- select employee -->
                   <div class="col-12">
                     <validate-field v-slot="{ value, field, }" v-model="form.employeeId" name="employeeId">
                       <q-select dense outlined :model-value="value" label="Employee" :options="employees" v-bind="field"
                         map-options clearable emit-value option-value="_id" option-label="name" />
-
                     </validate-field>
                   </div>
+                  <!-- field reason -->
                   <div class="col-12">
                     <validate-field v-slot="{ value, field }" v-model="form.reason" name="reason">
                       <q-input :model-value="value" outlined dense label="Reason " v-bind="field"></q-input>
                     </validate-field>
                   </div>
+                  <!-- field type -->
                   <div class="col-12">
                     <validate-field v-slot="{ value, field, }" v-model="form.type" name="type">
                       <q-select dense outlined :model-value="value" label="Type" :options="typeOpts" v-bind="field" />
-
                     </validate-field>
                   </div>
                 </div>
@@ -44,7 +44,6 @@
                             <q-date v-if="form.type=='Full'" v-model="form.fromDate" color="orange" text-color="white"
                               bordered>
                             </q-date>
-
                               <q-time v-else v-model="form.fromDate" :mask="mask" >
                                 <div class="row items-center justify-end">
                                   <q-btn v-close-popup label="Close" color="primary" flat />
@@ -53,53 +52,11 @@
                           </q-popup-proxy>
                         </q-icon>
                       </template>
-
-                      <!-- <template v-slot:prepend>
-                        <q-icon name="event" class="cursor-pointer" v-show="display">
-                          <q-popup-proxy transition-show="scale" transition-hide="scale">
-                            <q-date v-model="form.fromDate" color="orange" text-color="white" bordered></q-date>
-                          </q-popup-proxy>
-                        </q-icon>
-                      </template>
-                      <template v-if="form.type === 'Time'" v-slot:append>
-                        <q-icon name="access_time" class="cursor-pointer" v-show="displayTime">
-                          <q-popup-proxy cover transition-show="scale" transition-hide="scale" v-show="displayDateIcon">
-                            <q-time v-model="form.fromDate" mask="YYYY/MM/DD HH:mm"  >
-                              <div class="row items-center justify-end">
-                                <q-btn v-close-popup label="Close" color="primary" flat />
-                              </div>
-                            </q-time>
-                          </q-popup-proxy>
-                        </q-icon>
-                      </template>
-                      <template v-else v-slot:append>
-                        <q-icon name="access_time" class="cursor-pointer" v-show="displayTime">
-                          <q-popup-proxy cover transition-show="scale" transition-hide="scale" v-show="displayDateIcon">
-                            <q-time v-model="form.fromDate" mask="YYYY/MM/DD HH:mm" >
-                              <div class="row items-center justify-end">
-                                <q-btn v-close-popup label="Close" color="primary" flat />
-                              </div>
-                            </q-time>
-                          </q-popup-proxy>
-                        </q-icon>
-                      </template> -->
                     </q-input>
-
                   </div>
                   <!-- to date -->
                   <div class="col-12">
                     <q-input readonly filled label="To Date" v-model="form.toDate">
-
-
-                      <!-- <template v-slot:prepend>
-                        <q-icon name="event" class="cursor-pointer" v-show="display">
-                          <q-popup-proxy transition-show="scale" transition-hide="scale" v-show="displayDateIcon">
-                            <q-date v-model="form.toDate" :options="minDate" color="orange" text-color="white"
-                              bordered></q-date>
-                          </q-popup-proxy>
-                        </q-icon>
-                      </template> -->
-
                       <template v-slot:prepend>
                         <q-icon :name="form.type=='Full' ? 'event' : 'access_time'" class="cursor-pointer" >
                           <q-popup-proxy transition-show="scale" transition-hide="scale" >
@@ -115,39 +72,6 @@
                           </q-popup-proxy>
                         </q-icon>
                       </template>
-                      <!-- <template v-slot:append>
-                        <q-icon name="access_time" class="cursor-pointer" v-show="displayTime">
-                            <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                              <q-time v-model="form.toDate" :mask="mask" >
-                                <div class="row items-center justify-end">
-                                  <q-btn v-close-popup label="Close" color="primary" flat />
-                                </div>
-                              </q-time>
-                            </q-popup-proxy>
-                          </q-icon>
-                      </template> -->
-                      <!-- <template v-if="form.type === 'Time'" v-slot:append>
-                        <q-icon name="access_time" class="cursor-pointer" v-show="displayTime">
-                          <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                            <q-time v-model="form.toDate" mask="YYYY/MM/DD hh:mm"  >
-                              <div class="row items-center justify-end">
-                                <q-btn v-close-popup label="Close" color="primary" flat />
-                              </div>
-                            </q-time>
-                          </q-popup-proxy>
-                        </q-icon>
-                      </template>
-                      <template v-else v-slot:append>
-                        <q-icon name="access_time" class="cursor-pointer" v-show="displayTime">
-                          <q-popup-proxy cover transition-show="scale" transition-hide="scale">
-                            <q-time v-model="form.toDate" mask="YYYY/MM/DD hh:mm" >
-                              <div class="row items-center justify-end">
-                                <q-btn v-close-popup label="Close" color="primary" flat />
-                              </div>
-                            </q-time>
-                          </q-popup-proxy>
-                        </q-icon>
-                      </template> -->
                     </q-input>
                   </div>
                 </div>
@@ -184,8 +108,8 @@ import { Form as ValidateForm, Field as ValidateField } from 'vee-validate'
 import { object, string, number, array, ref as yupRef } from 'yup'
 import { Meteor } from 'meteor/meteor'
 import moment from 'moment'
-
-
+import { cloneDeep } from 'lodash'
+import useMethod from '../composables/useMethod'
 //variable
 const store = useStore()
 const currentBranchId = computed(() => store.getters['app/currentBranchId'])
@@ -202,10 +126,10 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['closed'])
+const emits = defineEmits(['closed'])
 const mask = ref('YYYY/MM/DD')
-const initForm = {
-  type: 'Full',
+const initForm = ()=>{
+ return  {type: 'Full',
   tranDate: new Date(),
   employeeId: '',
   status: 'active',
@@ -213,7 +137,7 @@ const initForm = {
   acceptedById: '',
   fromDate: moment().format('YYYY/MM/DD'),
   toDate: moment().add(1,'d').format('YYYY/MM/DD'),
-  branchId: '',
+  branchId: '',}
 }
 
 const typeOpts = ref(
@@ -224,17 +148,14 @@ const typeOpts = ref(
     'Time'
   ]
 )
-
+const formRef = ref(null)
 const displayDateIcon = ref(true)
-
 const display = ref(true)
 const displayTime = ref(true)
-// data properties
 const refForm = ref()
 const firstShowForm = ref(false)
-const form = ref({ ...initForm })
+const form = ref(initForm())
 const visibleDialog = ref(false)
-
 const convertDateTime = (strTime) => {
 const curr = moment()
 const splitStrTime = strTime.split(':')
@@ -248,15 +169,13 @@ const splitStrTime = strTime.split(':')
 //method
 
 const submit = async () => {
-  const { valid } = await refForm.value.validate()
-
+  // loading.value = true
+  const { valid } = await formRef.value.validate()
   if (valid) {
-    // if (form.value._id) {
-    //   update()
-    // } else {
-      insert()
-    // }
+   insert()
+  
   }
+  
 }
 const insert = () => {
   form.value.branchId = currentBranchId.value
@@ -280,7 +199,7 @@ const insert = () => {
     } else {
       Notify.success({ message: 'Success' })
       console.log('notica', res)
-      cancel()
+      reset()
     }
   })
 }
@@ -321,18 +240,15 @@ const remove = () => {
     //
   })
 }
+
 const reset = () => {
-  // refForm.value.resetValidation()
-  // refForm.value.reset()
-  // console.log(refForm.value)
-  delete form.value._id
-  form.value = { ...initForm }
+  formRef.value?.resetForm()
+  form.value = initForm()
 }
 
-// cancel
 const cancel = () => {
+  emits('closed',false)
   reset()
-  emit('closed', false)
 }
 
 //formate disable date
@@ -347,7 +263,6 @@ const minDate = (date) => {
   }
   return validate.value
 }
-
 
 //call department
 const employees = ref()
@@ -411,15 +326,7 @@ watch(
     }
   }
 )
-//watch when open dialog
-// watch(
-//   () => visibleDialog.value, (value) => {
-//     if (value == true) {
-//       form.value.toDate = moment(form.value.toDate,).format('YYYY/MM/DD HH:mm');
-//       form.value.fromDate = moment(form.value.fromDate,).format('YYYY/MM/DD HH:mm');
-//     }
-//   }
-// )
+
 //watch when select type
 watch(() => form.value.type, (val) => {
   mask.value = 'YYYY/MM/DD'
@@ -446,30 +353,6 @@ watch(() => form.value.type, (val) => {
     form.value.fromDate = moment(new Date(),).format("YYYY/MM/DD HH:mm");
     form.value.toDate = moment(new Date(),).format("YYYY/MM/DD HH:mm");
   }
-  // else{
-  // form.value.toDate = moment().format("YYYY/MM/DD HH:mm");
-  // form.value.fromDate = moment().format("YYYY/MM/DD HH:mm");
-
-  // }
-  
-// if(!props.showId){
-//   if (form.value.type === 'Full') {
-//     let today =new Date()
-//     form.value.toDate = moment(today,).add(1,'d').format("YYYY/MM/DD");
-//     // form.value.toDate = moment(new Date(),).format('YYYY/MM/DD');
-//     form.value.fromDate = moment(new Date(),).format('YYYY/MM/DD');
-//     displayTime.value = false
-//     display.value = true
-//   }
-//   else  {
-//     form.value.toDate = moment(new Date(),).format("YYYY/MM/DD HH:mm");
-//     form.value.fromDate = moment(new Date(),).format("YYYY/MM/DD HH:mm");
-//     displayDateIcon.value = false
-
-//     displayTime.value = true
-//     display.value = false
-//   } 
-// }
 }
 
 )

@@ -6,7 +6,7 @@
       </q-card-section>
 
       <q-card-section>
-        <validate-form ref="refForm" :validation-schema="rules">
+        <validate-form   ref="formRef" :validation-schema="rules">
           <q-form @submit.prevent>
             <div class="row q-col-gutter-x-xl q-col-gutter-y-md">
               <div class="col-xs-12 col-md-6 col-lg-6">
@@ -145,7 +145,7 @@ import { Meteor } from 'meteor/meteor'
 // variable
 const store = useStore()
 const currentBranchId = computed(() => store.getters['app/currentBranchId'])
-
+const formRef = ref(null)
 const $q = useQuasar()
 const props = defineProps({
   dialog: {
@@ -158,27 +158,29 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['closed'])
+const emits = defineEmits(['closed'])
 
-const initForm = {
+const initForm = ()=>{
+  return {
   name: '',
   typeId: '',
   positionId: '',
   address: '',
   telephone: '',
-  startDate: new Date(),
+  startDate: moment(new Date()).format('YYYY/MM/DD'),
   checkIn: '',
   checkOut: '',
   branchId: '',
   token: '',
+}
 }
 const statusOpts = [
   { label: 'Active', value: 'active' },
   { label: 'Inactive', value: 'inactive' },
 ]
 
-const refForm = ref()
-const form = ref({ ...initForm })
+const form = ref(initForm())
+
 const visibleDialog = ref(false)
 
 const rules = object({
@@ -226,7 +228,7 @@ const checkExist = (selector) => {
 //  submit  
 
 const submit = async () => {
-  const { valid } = await refForm.value.validate()
+  const { valid } = await formRef.value.validate()
 
   if (valid) {
     if (form.value._id) {
@@ -260,7 +262,7 @@ const insert = () => {
       Notify.error({ message: err.reason || err })
     } else {
       Notify.success({ message: 'Success' })
-      cancel()
+      reset()
     }
   })
 }
@@ -304,19 +306,20 @@ const remove = () => {
     //
   })
 }
-//reset employee form
 const reset = () => {
-  // refForm.value.resetValidation()
-  // refForm.value.reset()
-  // console.log(refForm.value)
-  delete form.value._id
-  form.value = { ...initForm }
+  formRef.value?.resetForm()
+  // form.value = initForm()
+  form.value.name =''
+  form.value.token=''
+  form.value.employeetype=''
+  form.value.positionId=''
+  form.value.address=''
+  form.value.telephone=''
 }
 
-// cancel
 const cancel = () => {
+  emits('closed',false)
   reset()
-  emit('closed', false)
 }
 
 //call department
@@ -425,5 +428,12 @@ watch(
     }
   }
 )
+// watch(()=>reset(),(value)=>{
+//   const doc = branches.value.find(it => it._id = value)
+//     // console.log(doc)
+//     form.value.branchId = currentBranchId.value
+//     form.value.checkIn = moment(doc.checkIn, "HH:mm").format("HH:mm");
+//     form.value.checkOut = moment(doc.checkOut, "HH:mm").format("HH:mm");
+// })
 </script>
   
