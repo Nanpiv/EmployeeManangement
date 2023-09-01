@@ -21,7 +21,7 @@
   
         <q-input
           v-model="filter"
-          outlined
+          borderless
           dense
           debounce="300"
           placeholder="Search"
@@ -92,7 +92,7 @@ const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
   const loading = ref(false)
   // pagination
   const pagination = ref({
-    sortBy: 'name',
+    sortBy: 'branchName',
     descending: false,
     page: 1,
     rowsPerPage: 10,
@@ -119,8 +119,8 @@ const currentBranchId = computed(()=>store.getters['app/currentBranchId'])
     const query = { branchId:currentBranchId.value}
     if (filter.value) {
       query['$or'] = [
-        { name: { $regex: exp, $options: 'i' } },
-        { status: { $regex: exp, $options: 'i' } },
+        // { tranDate: { $regex: exp, $options: 'i' } },
+        { reason: { $regex: exp, $options: 'i' } },
         
       ]
     }

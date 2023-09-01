@@ -155,12 +155,15 @@ const columns = ref([
     label: 'Role Group',
     align: 'left',
     field: 'roleGroup',
+    align: 'left',
   },
   {
     name: 'status',
     label: 'Status',
     align: 'left',
     field: 'profile.status',
+    align: 'left',
+
   },
 ])
 

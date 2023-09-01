@@ -9,7 +9,6 @@
       <q-table
       :rows=list
       :columns=columns
-
       >
       <template #body-cell-timestamp="props">
         <q-td :props="props">
@@ -31,17 +30,13 @@ const columns=[
   {name:'message',label:'Message',field:'message',align:'left' },
   {name:'timestamp',label:'Date',field:'timestamp',align:'left' },
   {name:'brachName',label:'Branch',field:'brachName',align:'left' }
-
-
 ]
 
 const list=ref([])
-
 const fetchNoti = () =>{
   const selector = {
     // createdBy: Meteor.userId(),
     to: Meteor.userId(),
-
   }
 
   Meteor.call('fetchNoti1',selector,(err,res)=>{

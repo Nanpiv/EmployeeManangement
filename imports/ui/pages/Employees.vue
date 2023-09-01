@@ -21,7 +21,7 @@
   
         <q-input
           v-model="filter"
-          outlined
+          borderless
           dense
           debounce="300"
           placeholder="Search"

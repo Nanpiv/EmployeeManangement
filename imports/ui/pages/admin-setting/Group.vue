@@ -1,5 +1,7 @@
 <template>
-    <q-table
+   <q-card>
+    <q-card-section>
+      <q-table
       v-model:pagination="pagination"
       bordered
       flat
@@ -21,7 +23,7 @@
   
         <q-input
           v-model="filter"
-          outlined
+          borderless
           dense
           debounce="300"
           placeholder="Search"
@@ -45,12 +47,13 @@
       </template>
      
     </q-table>
-  
+    </q-card-section>
     <GroupForm
       :dialog="visibleDialog"
       :show-id="showId"
       @closed="handleClosedDialog"
     />
+   </q-card>
   </template>
   <script setup>
   import { onMounted, ref } from 'vue'

@@ -1,5 +1,7 @@
 <template>
-    <q-table
+    <q-card>
+      <q-card-section>
+        <q-table
       v-model:pagination="pagination"
       bordered
       flat
@@ -21,7 +23,7 @@
   
         <q-input
           v-model="filter"
-          outlined
+          borderless
           dense
           debounce="300"
           placeholder="Search"
@@ -46,12 +48,13 @@
         </q-td>
       </template>
     </q-table>
-  
-    <PositionForm
+      </q-card-section>
+      <PositionForm
       :dialog="visibleDialog"
       :show-id="showId"
       @closed="handleClosedDialog"
     />
+    </q-card>
   </template>
   <script setup>
   import { onMounted, ref,watch,computed } from 'vue'
@@ -64,10 +67,11 @@ import { useStore } from '/imports/store'
       label: 'Name',
       align: 'left',
       field: 'name',
+      align: 'left',
     },
-    { name: 'branchName', label: 'Branch', field: 'branchName' },
-    { name: 'departmentName', label: 'Department', field: 'departmentName' },
-    { name: 'status', label: 'Status', field: 'status' },
+    { name: 'branchName', label: 'Branch', field: 'branchName', align: 'left', },
+    { name: 'departmentName', label: 'Department', field: 'departmentName', align: 'left', },
+    { name: 'status', label: 'Status', field: 'status', align: 'left', },
   ]
   const store =useStore()
 const currentBranchId = computed(()=>store.getters['app/currentBranchId'])

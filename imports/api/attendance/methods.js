@@ -68,6 +68,17 @@ Meteor.methods({
           branchName:"$branchDoc.name",
           reason: 1,
         },
+        
+      },
+      {
+        $project: {
+          type: 1,
+          tranDate: 1,
+          employeeName: 1,
+          branchName:1,
+          reason: 1,
+        },
+        
       },
     ]);
     const total = Attendances.find(selector).count();
