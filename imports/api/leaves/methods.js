@@ -3,6 +3,7 @@ import { ValidatedMethod } from "meteor/mdg:validated-method";
 import SimpleSchema from "simpl-schema";
 import Leaves from "./leaves";
 import Notifications from "../notifications/notifications";
+
 // import { useStore } from "/imports/store";
 // const store =useStore()
 // const currentBranchId = store.getters['app/currentBranchId']
@@ -143,7 +144,7 @@ Meteor.methods({
         branchId:doc.branchId,
         employeeId:doc.employeeId,
         timestamp:Date.now(),
-        to:'ZYDNrkxumdHah5G3i'
+        to:'acceptLeave'
       })
 
       return data

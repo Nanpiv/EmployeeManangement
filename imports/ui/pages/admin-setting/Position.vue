@@ -12,7 +12,7 @@
     >
       <template #top>
         <div class="q-gutter-x-md">
-          <q-btn color="primary" no-caps icon="add" @click.prevent="addNew">
+          <q-btn color="primary" no-caps icon="add" @click.prevent="addNew" v-if="$userIsInRole('insertPosition')">
             Add
           </q-btn>
         </div>

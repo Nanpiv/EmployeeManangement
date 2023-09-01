@@ -113,11 +113,11 @@ import Notify from '../lib/notify';
 import { useQuasar } from 'quasar';
 import { useRouter } from 'vue-router';
 import { Meteor } from 'meteor/meteor';
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch,inject } from 'vue';
 import { subscribe, autorun } from 'vue-meteor-tracker'
 import Notifications from '/imports/api/notifications/notifications';
 
-
+const userIsInRole =inject('$userIsInRole')
 const $q = useQuasar()
 const router =useRouter()
 
@@ -125,8 +125,8 @@ const router =useRouter()
 const { ready: notiReady } = subscribe(() => [
   'notificat',
   {
-    // createdBy: Meteor.userId(),
-    to:Meteor.userId(),
+    createdBy: Meteor.userId(),
+    // to:Meteor.userId(),
     status:'active'
   },
 ])
@@ -142,7 +142,9 @@ const list=ref([])
 let notiNumber = ref(0)
 
 const updateNotifi =()=>{
- const selector={to:Meteor.userId()}
+//  const selector={to:Meteor.userId()}
+ const selector={createdBy:Meteor.userId()}
+
   Meteor.call('updateNotiStatus',selector,(err,res)=>{
     if(!err){
       console.log('update notifi sucess',res)
@@ -166,8 +168,8 @@ const removeAllNotifi = () => {
 
 const fetchNoti = () =>{
   const selector = {
-    // createdBy: Meteor.userId(),
-    to:Meteor.userId()
+    createdBy: Meteor.userId(),
+    // to:Meteor.userId()
   }
 
   Meteor.call('fetchNoti1',selector,(err,res)=>{

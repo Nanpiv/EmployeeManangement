@@ -69,8 +69,9 @@
   
         <q-card-actions align="right" class="bg-white text-teal">
           <div class="text-right q-gutter-sm">
-            <q-btn color="primary" @click="submit"> Save </q-btn>
-            <q-btn v-if="showId" color="red" @click="remove"> Remove </q-btn>
+            <q-btn v-if="$userIsInRole('insertEmployeeType') && !showId" color="primary" @click="submit"> Save </q-btn>
+            <q-btn v-if="$userIsInRole('updateEmployeeType') && showId" color="primary" @click="submit"> Save </q-btn>
+            <q-btn v-if="showId && $userIsInRole('removeEmployeeType')" color="red" @click="remove"> Remove </q-btn>
             <q-btn outline color="primary" @click="cancel"> Cancel </q-btn>
           </div>
         </q-card-actions>

@@ -12,7 +12,7 @@
     >
       <template #top>
         <div class="q-gutter-x-md">
-          <q-btn color="primary" no-caps icon="add" @click.prevent="addNew">
+          <q-btn color="primary" no-caps icon="add" @click.prevent="addNew" v-if="$userIsInRole('insertLeave')">
             Add
           </q-btn>
         </div>
@@ -33,7 +33,7 @@
       </template>
       <template #body-cell-employeeName="props">
         <q-td :props="props">
-          <span @click="edit(props.row)" class="ra-text-link" v-if="props.row.status==='active' && Meteor.userId() !=='ZYDNrkxumdHah5G3i'">
+          <span @click="edit(props.row)" class="ra-text-link" v-if="props.row.status==='active'">
             {{ props.row.employeeName }}
           </span>
           <span v-else>
@@ -314,16 +314,9 @@ return moment(date).format('YYYY/MM/DD HH:mm A')
     console.log(currentBranchId.value,)
     fetchData()
   })
-//   watch(()=>
-//  data.value.acceptedById,()=>{
-//     // if(!value) return false 
-
-//     const doc = users.value.find(it=>it._id=value)
-//     console.log('d',doc)
-   
-  
-
-//   })
+watch(()=>updateStatus,()=>{
+  fetchData()
+})
 
   </script>
   
